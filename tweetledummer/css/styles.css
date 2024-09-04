@@ -1,0 +1,215 @@
+body {
+  margin: 10px 80px;
+  background-color: #ddd;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  text-align: left;
+}
+.info-column {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 210px;
+  padding: 20px;
+  height: 100%;
+  overflow: auto;
+}
+.info-column div {
+  float: left;
+  clear: both;
+  width: 140px;
+  padding-bottom: 20px;
+  position: relative;
+}
+.main {
+  float: left;
+  width: 600px;
+  margin-left: 120px;
+}
+#unread-count {
+  font-size: 1.2em;
+  color: #666;
+  background-color: #bbb;
+  border-radius: 5px;
+  padding: 5px;
+}
+#unread-count.loading {
+  background-color: #fff3cd;
+}
+#current-view {
+  font-size: 1em;
+  color: #666;
+  background-color: #bbb;
+  border-radius: 5px;
+  padding: 5px;
+}
+.tweetledum-feed {
+  margin: 20px 0;
+  width: 545px;
+}
+#load-more, .bulk-save {
+  cursor: pointer;
+  width: 175px;
+  margin: 20px 0 100px 0;
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 0.25rem;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  -webkit-appearance: button;
+}
+.bulk-save {
+  margin-bottom: 20px;
+}
+#load-more:hover, .bulk-save:hover {
+  background-color: #999;
+  border-color: #999;
+}
+.bulk-input {
+  width: 300px;
+  clear: both;
+  font-size: 1rem;
+  line-height: 1.9;
+  padding: 0 4px;
+}
+.bulk-save.bulk-save--list {
+  margin-top: 5px;
+}
+.tweetledum-tweet {
+  margin-bottom: 30px;
+  padding: 10px 20px;
+  border: 2px solid transparent;
+}
+.tweetledum-tweet:hover {
+  border-radius: 10px;
+  border: 2px solid #999;
+  background-color: #ccc;
+}
+.tweetledum-tweet.active {
+  border-radius: 10px;
+  border: 2px solid #999;
+  background-color: #ccc;
+}
+.loading-message {
+  width: 135px;
+  position: relative;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid #333;
+  border-radius: 0.25rem;
+  color: #fff;
+  background-color: #999;
+}
+.loading-message.error {
+  border: 1px solid #f9c9bf;
+  color: #a51b00;
+  background-color: #fcf4f2;
+}
+.tweetledum-quoted {
+  width: 475px;
+  margin-left: 25px;
+}
+.info-column .tweetledum-controls {
+  position: absolute;
+  bottom: 0;
+  height: 200px;
+  margin: 0 0 20px 0;
+}
+.info-column .tweetledum-controls button {
+  display: block;
+  clear: both;
+  padding: 10px 0 10px 0;
+  margin: 10px 0 0 0;
+  font-size: 20px;
+  width: 45px;
+  background-color: #ccc;
+  border: 1px solid #999;
+  border-radius: 0.25rem;
+}
+.tweetledum-bulk {
+  margin: 20px 0 0 60px;
+  width: 505px;
+}
+.bulk-mark-read td.checkbox {
+}
+.bulk-mark-read td.tweeter {
+}
+.bulk-mark-read td.count {
+  text-align: right;
+}
+.lists-wrapper h3 {
+  margin-bottom: 0;
+}
+.lists-wrapper .lists ul {
+  padding-inline-start: 17px;
+}
+.list-fields {
+  margin-top: 30px;
+}
+.messages {
+  width: 400px;
+  border: 1px solid #3c763d;
+  padding: 10px;
+  color: #3c763d;
+  background-color: #dff0d8;
+  margin-bottom: 30px;
+}
+.messages.errors {
+  border-color: #a94442;
+  color: #a94442;
+  background-color: #f2dede;
+}
+div.count-label {
+  padding-bottom: 0;
+  font-weight: bold;
+}
+.count-value {
+  font-size: 1.2em;
+  color: #666;
+  background-color: #bbb;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+@media screen and (min-width: 775px) {
+/*
+  .bulk-save--mark {
+    position: fixed;
+    left: 500px;
+    bottom: 0%;
+  }
+*/
+  .bulk-save.bulk-save--list {
+      margin-top: 20px;
+  }
+  .list-fields {
+      padding: 0 50px;
+  }
+  .actions div {
+      display: inline;
+  }
+  .actions {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      background-color: #fff3cd;
+      border-top: 2px solid;
+      width: 100%;
+      padding-left: 30px;
+  }
+}
+

@@ -1,0 +1,8 @@
+{
+    "require-dev": {
+        "kint-php/kint": "^5.1"
+    },
+    "require": {
+        "cjrasmussen/bluesky-api": "^2.0"
+    }
+}

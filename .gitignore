@@ -1,0 +1,18 @@
+# Ignore the key file.
+tweetledum/tldlib/keys/tweetledee_keys.php
+settings.php
+
+# Ignore editor files.
+.projects
+*.sublime-project
+*.sublime-workspace
+*.sublime-projectcompletions
+.idea*
+*/.idea*
+
+# Ignore OS-generated files.
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
