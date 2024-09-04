@@ -123,13 +123,20 @@ class BlueskyApi
 			curl_setopt($c, CURLOPT_POSTFIELDS, json_encode($args, JSON_THROW_ON_ERROR));
 		}
 
-		curl_setopt($c, CURLOPT_HEADER, 0);
+		curl_setopt($c, CURLOPT_HEADER, 1);
 		curl_setopt($c, CURLOPT_VERBOSE, 0);
 		curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($c, CURLOPT_SSL_VERIFYPEER, 1);
 
-		$data = curl_exec($c);
+		$result = curl_exec($c);
 		curl_close($c);
+
+		$parts = explode("\r\n\r\n", $result);
+		if ($headers = array_shift($parts)) {
+			$headers = explode("\r\n", $headers);
+			//print '<pre><hr>$headers<hr>' . print_r($headers, true) . '<hr></pre>';
+		}
+		$data = implode("\r\n\r\n", $parts);
 
 		return json_decode($data, false, 512, JSON_THROW_ON_ERROR);
 	}
@@ -168,9 +175,9 @@ class BlueskyApi
 	{
 		$this->apiKey = $api_key;
 		$data = $this->request('POST', 'com.atproto.server.refreshSession');
-		unset($this->apiKey);
+		$this->apiKey = null;
 
-		if ($data->error) {
+		if (!empty($data->error)) {
 			throw new RuntimeException($data->message);
 		}
 
