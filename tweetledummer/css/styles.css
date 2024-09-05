@@ -104,21 +104,61 @@ body {
   border: 2px solid #999;
   background-color: #ccc;
 }
+.tweetledum-tweet .extra-info {
+  margin: 12px 0;
+}
 .tweetledum-tweet .extra-info,
 .tweetledum-tweet .extra-info .extra-info-body {
   display: none;
 }
-.tweetledum-tweet .extra-info-author {
+.tweetledum-tweet .extra-info-author-link {
   text-align: right;
 }
 .tweetledum-tweet:hover .extra-info,
 .tweetledum-tweet.active .extra-info {
   display: block;
 }
+.tweetledum-tweet .extra-info-author-name {
+  font-weight: bold;
+  margin-bottom: -5px;
+}
+.tweetledum-tweet .extra-info-author-handle {
+  font-size: 15px;
+  color: #57426c;
+}
+.tweetledum-tweet .extra-info-author-info {
+  padding-bottom: 10px;
+}
+.tweetledum-tweet .extra-info-author-info img {
+  float: left;
+  padding: 8px 8px 0 8px;
+}
 .tweetledum-tweet .extra-info:hover .extra-info-body,
 .tweetledum-tweet.show-extra .extra-info .extra-info-body {
   display: block;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 10px;
 }
+.tweetledum-tweet .extra-info-body {
+  font-size: 18px;
+  font-family: ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+}
+.tweetledum-tweet.show-extra .bluesky-embed
+/*.tweetledum-tweet.show-extra .extra-info-author-link*/
+{
+  display: none !important;
+}
+
+/*<div class="extra-info-author-info">*/
+/*<img width="30" height="30" src="images/circle-user-regular.svg">*/
+/*<div class="extra-info-author">*/
+/*<div class="extra-info-author-name">{$author['author_display_name']}</div>*/
+/*<div class="extra-info-author-handle">@{$author['author_handle']}</div>*/
+/*</div>*/
+
+
 .loading-message {
   width: 135px;
   position: relative;

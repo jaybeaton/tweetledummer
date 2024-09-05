@@ -252,12 +252,24 @@ EOT;
     }
 
     public function getExtraInfoMarkup($author, $body) {
-        $post_author = '<a href="' . $author['author_url'] . '">' . htmlentities($author['author_display_name'] . ' (@' . $author['author_handle'] . ')') . '</a>';
+        foreach (['author_display_name', 'author_handle'] as $key) {
+            $author[$key] = htmlentities($author[$key]);
+        }
+        $post_author_link= '<a href="' . $author['author_url'] . '">' . $author['author_display_name'] . ' (@' . $author['author_handle'] . ')</a>';
         $post_body = htmlentities($body);
         return <<<EOT
     <div class="extra-info">
-        <div class="extra-info-author">- {$post_author}</div>
-        <div class="extra-info-body">{$post_body}</div>
+        <div class="extra-info-body">
+            <div class="extra-info-author-info">
+                <img width="35" height="35" src="images/circle-user-regular.svg">
+                <div class="extra-info-author">
+                    <div class="extra-info-author-name">{$author['author_display_name']}</div>
+                    <div class="extra-info-author-handle">@{$author['author_handle']}</div>
+                </div>
+            </div>
+            {$post_body}
+        </div>
+        <div class="extra-info-author-link">- {$post_author_link}</div>
     </div>
 EOT;
     }
