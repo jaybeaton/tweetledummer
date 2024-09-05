@@ -12,7 +12,7 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  width: 210px;
+  width: 260px;
   padding: 20px;
   height: 100%;
   overflow: auto;
@@ -20,14 +20,14 @@ body {
 .info-column div {
   float: left;
   clear: both;
-  width: 140px;
+  width: 190px;
   padding-bottom: 20px;
   position: relative;
 }
 .main {
   float: left;
   width: 600px;
-  margin-left: 120px;
+  margin-left: 170px;
 }
 #unread-count {
   font-size: 1.2em;
@@ -104,6 +104,20 @@ body {
   border: 2px solid #999;
   background-color: #ccc;
 }
+.tweetledum-tweet .extra-info,
+.tweetledum-tweet .extra-info .extra-info-body {
+  display: none;
+}
+.tweetledum-tweet .extra-info-author {
+  text-align: right;
+}
+.tweetledum-tweet:hover .extra-info,
+.tweetledum-tweet.active .extra-info {
+  display: block;
+}
+.tweetledum-tweet .extra-info:hover .extra-info-body {
+  display: block;
+}
 .loading-message {
   width: 135px;
   position: relative;
@@ -122,6 +136,12 @@ body {
 .tweetledum-quoted {
   width: 475px;
   margin-left: 25px;
+}
+.tweetledum-reply-to-embed {
+  width: 460px;
+  padding-left: 19px;
+  margin-left: 19px;
+  border-left: 2px solid #999;
 }
 .info-column .tweetledum-controls {
   position: absolute;

@@ -95,7 +95,7 @@ class TweetledummerBluesky {
             $key = 'bluesky_refresh_token:' . $this->blueskyUsername;
             $query->bind_param('s', $key);
             $query->execute();
-            $this->blueskyRefreshToken = $query->get_result()->fetch_object()->value;
+            $this->blueskyRefreshToken = $query->get_result()->fetch_object()->value ?? '';
         }
         return $this->blueskyRefreshToken;
     }
@@ -113,10 +113,14 @@ class TweetledummerBluesky {
         return $this->blueskyApi->request('GET', 'app.bsky.actor.getProfile', $args);
     }
 
-    public function getTimeline($args = []) {
+    public function getTimeline($args = [], $all_results = FALSE) {
+
+        static $posts = [];
+
         if (!$this->blueskyIsAuthed) {
             $this->getBlueskyAuth();
         }
+
         $args += [
             'collection' => 'app.bsky.feed.getTimeline',
 //            'algorithm' => 'xxx',
@@ -128,26 +132,30 @@ class TweetledummerBluesky {
             return FALSE;
         }
 
-        $posts = [];
         foreach ($result->feed as $item) {
-            $post = $item->post;
-            $data = $this->getPostData($post);
-            $data['full'] = $post;
+            $data = $this->getPostData($item);
+            $data['full'] = $item;
             $posts[] = $data;
         } // Lop thru posts.
 
         $num_posts = count($posts);
-        $cursor = $result->cursor;
+        $cursor = $result->cursor ?? NULL;
+
+//        if ($all_results && $cursor && $num_posts < 2000) {
+        if ($all_results && $cursor) {
+            $args['cursor'] = $cursor;
+            $this->getTimeline($args, TRUE);
+        }
 
         return $posts;
 
     }
 
-    public function getPostData($post, $is_reply = FALSE) {
-        //        $tz = date_default_timezone_get();
+    public function getPostData($item, $is_reply = FALSE) {
+        $post = (!empty($item->post)) ? $item->post : $item;
+        //$tz = date_default_timezone_get();
         $utc = new \DateTimeZone('UTC');
         $tz = new \DateTimeZone('America/New_York');
-
         $created_at = $post->record->createdAt ?? ($post->value->createdAt ?? NULL);
         $timestamp = ($created_at) ? strtotime($created_at) : FALSE;
         if ($timestamp !== FALSE) {
@@ -161,32 +169,35 @@ class TweetledummerBluesky {
         $data = [
             'post_id' => $this->getPostIdFromUri($post->uri),
             'uri' => $post->uri,
-            'cid' => $post->cid,
+            'cid' => $post->cid ?? '',
             'post_url' => $this->getPostUrl($post),
             'text' => $post->record->text ?? ($post->value->text ?? NULL),
-            'author_did' => $post->author->did,
-            'author_handle' => $post->author->handle,
-            'author_display_name' => $post->author->displayName,
-            'author_url' => $this->getAuthorUrl($post),
+            'author_did' => $post->author->did ?? '',
+            'author_handle' => $post->author->handle ?? '',
+            'author_display_name' => $post->author->displayName ?? '',
+            'author_url' => $this->getAuthorUrl($post->author ?? NULL),
             'link_embed' => $post->record->embed->external->uri ?? NULL,
             'link_facet' => $post->record->facets[0]->features[0]->uri ?? NULL,
             'created' => $created,
             'timestamp' => $timestamp,
+            'repost' => [],
             'quoted' => [],
             'reply_to' => [],
         ];
-
+        $reason_type = $item->reason->{'$type'} ?? NULL;
+        if ($reason_type == 'app.bsky.feed.defs#reasonRepost') {
+            $data['repost'] = [
+                'author_handle' => $item->reason->by->handle,
+                'author_display_name' => $item->reason->by->displayName,
+                'author_url' => $this->getAuthorUrl($item->reason->by),
+            ];
+        }
         if (!$is_reply) {
             if (!empty($post->embed->record->cid)) {
                 //$post->embed->record->value->{'$type'} = 'app.bsky.feed.post';
                 $data['quoted'] = $this->getPostData($post->embed->record, TRUE);
-            } elseif (!empty($post->record->reply->parent->cid)) {
-                $data['reply_to'] = [
-                    'post_id' => $this->getPostIdFromUri($post->record->reply->parent->uri),
-                    'uri' => $post->record->reply->parent->uri,
-                    'cid' => $post->record->reply->parent->cid,
-                    'post_url' => $this->getPostUrlFromUri($post->record->reply->parent->uri),
-                ];
+            } elseif (!empty($item->reply->parent)) {
+                $data['reply_to'] = $this->getPostData($item->reply->parent, TRUE);
             }
         }
         return $data;
@@ -210,13 +221,19 @@ class TweetledummerBluesky {
 
     public function getPostUrl($post) {
 //        https://bsky.app/profile/{$post['author']['did']}/post/{$post['post_id']
+        if (empty($post->author->did) || empty($post->uri)) {
+            return '';
+        }
         $url = 'https://bsky.app/profile/' . $post->author->did . '/post/' . $this->getPostIdFromUri($post->uri);
         return $url;
     }
 
-    public function getAuthorUrl($post) {
+    public function getAuthorUrl($post_author) {
         // https://bsky.app/profile/{$post['author']['did']}
-        $url = 'https://bsky.app/profile/' . $post->author->did;
+        if (empty($post_author->did)) {
+            return '';
+        }
+        $url = 'https://bsky.app/profile/' . $post_author->did;
         return $url;
     }
 
