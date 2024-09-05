@@ -219,23 +219,10 @@ class TweetledummerController {
                     . $embed;
             }
 
-            if (0 && !empty($quoted)) {
-                $embed .= '<div class="tweetledum-quoted">'
-                    . $quoted
-                    . '</div>';
-            }
-
-            if (1 && !empty($quoted)) {
+            if (!empty($quoted)) {
                 $embed .= '<details class="tweetledum-quoted"><summary>Quoted</summary>'
                     . $quoted
                     . '</details>';
-            }
-
-            if (0 && !empty($reply_to)) {
-                $embed = '<details class="tweetledum-reply-to" open><summary>Reply</summary><div class="tweetledum-reply-to-embed">'
-                    . $reply_to
-                    . '</div></details>'
-                    . $embed;
             }
 
             if (!empty($reply_to)) {
