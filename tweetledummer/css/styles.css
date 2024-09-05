@@ -139,12 +139,19 @@ body {
   display: block;
   background-color: #fff;
   border-radius: 12px;
-  padding: 9px 16px;
+  padding: 9px 16px 16px 16px;
   margin-bottom: 10px;
+  min-height: 188px;
 }
 .tweetledum-tweet .extra-info-body {
   font-size: 18px;
   font-family: ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+}
+.tweetledum-tweet .extra-info-created {
+  font-size: .875rem;
+  line-height: 1.25rem;
+  color: #57426c;
+  margin-top: 12px;
 }
 .tweetledum-tweet.show-extra .bluesky-embed
 /*.tweetledum-tweet.show-extra .extra-info-author-link*/

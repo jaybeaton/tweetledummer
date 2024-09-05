@@ -6,7 +6,7 @@ use cjrasmussen\BlueskyApi\BlueskyApi;
 
 class TweetledummerBluesky {
 
-    const DATE_FORMAT_DISPLAY = 'M j, Y \a\t h:i A';
+    const DATE_FORMAT_DISPLAY = 'M j, Y \a\t g:i A';
     const DATE_FORMAT_DB = 'Y-m-d H:i:s';
 
     private $settings = [];
