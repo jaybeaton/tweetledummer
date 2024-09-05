@@ -351,6 +351,10 @@ let twtldListname= '';
       // Pressing "r" will reload.
       location.reload();
     }
+    else if (keyCode === 83) {
+      // Pressing "s" will show/hide extra info body.
+      activeItem.toggleClass('show-extra');
+    }
   };
 
   $(document).keydown(function (event) {

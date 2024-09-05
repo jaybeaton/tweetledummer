@@ -115,7 +115,8 @@ body {
 .tweetledum-tweet.active .extra-info {
   display: block;
 }
-.tweetledum-tweet .extra-info:hover .extra-info-body {
+.tweetledum-tweet .extra-info:hover .extra-info-body,
+.tweetledum-tweet.show-extra .extra-info .extra-info-body {
   display: block;
 }
 .loading-message {
