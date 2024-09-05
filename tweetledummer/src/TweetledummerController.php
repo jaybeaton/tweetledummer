@@ -173,7 +173,9 @@ class TweetledummerController {
             $date->setTimezone($tz);
             $row['data']['created'] = $date->format(self::DATE_FORMAT_DISPLAY);
 
-            $embed = $this->tweetledummer->getEmbed($row['data']);
+            $embed = $this->tweetledummer->getEmbed($row['data'])
+             . $this->getExtraInfoMarkup($row['data'], $row['body']);
+
 
             $quoted = '';
             if (!empty($row['data']['quoted'])) {
@@ -182,7 +184,8 @@ class TweetledummerController {
 
             $reply_to = '';
             if (!empty($row['data']['reply_to'])) {
-                $reply_to = $this->tweetledummer->getEmbed($row['data']['reply_to'], 'reply-to');
+                $reply_to = $this->tweetledummer->getEmbed($row['data']['reply_to'], 'reply-to')
+                  . $this->getExtraInfoMarkup($row['data']['reply_to'], $row['data']['reply_to']['text']);
             }
 
             $link_url = NULL;
@@ -232,15 +235,9 @@ class TweetledummerController {
                     . $embed;
             }
 
-            $post_author = '<a href="' . $row['data']['author_url'] . '">' . htmlentities($row['data']['author_display_name'] . ' (@' . $row['data']['author_handle'] . ')') . '</a>';
-            $post_body = htmlentities($row['body']);
             print <<<EOT
 <div class="tweetledum-tweet tweetledum-new {$first_class}" id="tweetledum-{$row['id']}" data-id="{$row['id']}" data-url="{$link_url}" data-tweet="{$row['data']['post_url']}">
 {$embed}
-  <div class="extra-info">
-    <div class="extra-info-author">- {$post_author}</div>
-    <div class="extra-info-body">{$post_body}</div>
-  </div>
 </div>
 
 
@@ -252,6 +249,17 @@ EOT;
 
         $query->close();
 
+    }
+
+    public function getExtraInfoMarkup($author, $body) {
+        $post_author = '<a href="' . $author['author_url'] . '">' . htmlentities($author['author_display_name'] . ' (@' . $author['author_handle'] . ')') . '</a>';
+        $post_body = htmlentities($body);
+        return <<<EOT
+    <div class="extra-info">
+        <div class="extra-info-author">- {$post_author}</div>
+        <div class="extra-info-body">{$post_body}</div>
+    </div>
+EOT;
     }
 
     public function markRead($id, $author = NULL, $list = NULL) {
