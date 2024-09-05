@@ -119,8 +119,9 @@ body {
   display: block;
 }
 .tweetledum-tweet .extra-info-author-name {
+  font-size: 17px;
   font-weight: bold;
-  margin-bottom: -5px;
+  margin-bottom: -4px;
 }
 .tweetledum-tweet .extra-info-author-handle {
   font-size: 15px;
@@ -131,14 +132,14 @@ body {
 }
 .tweetledum-tweet .extra-info-author-info img {
   float: left;
-  padding: 8px 8px 0 8px;
+  padding: 6px 10px 0 0;
 }
 .tweetledum-tweet .extra-info:hover .extra-info-body,
 .tweetledum-tweet.show-extra .extra-info .extra-info-body {
   display: block;
   background-color: #fff;
   border-radius: 12px;
-  padding: 20px;
+  padding: 9px 16px;
   margin-bottom: 10px;
 }
 .tweetledum-tweet .extra-info-body {

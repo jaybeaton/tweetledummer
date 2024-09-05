@@ -261,7 +261,7 @@ EOT;
     <div class="extra-info">
         <div class="extra-info-body">
             <div class="extra-info-author-info">
-                <img width="35" height="35" src="images/circle-user-regular.svg">
+                <img width="40" height="40" src="images/circle-user-regular.svg">
                 <div class="extra-info-author">
                     <div class="extra-info-author-name">{$author['author_display_name']}</div>
                     <div class="extra-info-author-handle">@{$author['author_handle']}</div>
