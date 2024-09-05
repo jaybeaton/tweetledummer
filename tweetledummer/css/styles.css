@@ -115,7 +115,8 @@ body {
   text-align: right;
 }
 .tweetledum-tweet:hover .extra-info,
-.tweetledum-tweet.active .extra-info {
+.tweetledum-tweet.active .extra-info,
+.tweetledum-tweet.show-extra .extra-info {
   display: block;
 }
 .tweetledum-tweet .extra-info-author-name {
