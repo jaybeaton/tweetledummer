@@ -103,7 +103,7 @@ let twtldListname= '';
         }
         noNewTweets = true;
         if (status === 200) {
-          $('.loading-message').text('No new tweets.');
+          $('.loading-message').text('No new posts.');
         }
         else {
           $('.loading-message').addClass('error').text('Error reading tweets.');

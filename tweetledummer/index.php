@@ -53,7 +53,7 @@ if (!empty($profile->avatar)) {
 </div>
 <div class="main">
     <div class="tweetledum-feed"></div>
-    <button id="load-more">Load More Tweets</button>
+    <button id="load-more">Load More Posts</button>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
