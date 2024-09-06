@@ -270,7 +270,6 @@ EOT;
             {$post_body}
             <div class="extra-info-created">{$author['created']}</div>
         </div>
-        <div class="extra-info-author-link">- {$post_author_link}</div>
     </div>
 EOT;
     }
