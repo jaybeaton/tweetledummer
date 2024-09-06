@@ -1,29 +1,44 @@
-A simple PHP / Javascript web Twitter timeline reader based on the Tweetledee
-library.
+Tweetledummer
+===================
 
-https://github.com/tweetledee/tweetledee
+A simple PHP / Javascript web Bluesky timeline reader.
 
 It stores a user's tweets in a MySQL database and lets the user view their
-timeline in chronological order without missing past tweets.
+timeline in chronological order without missing past posts.
+
+Based on my Tweetledum Twitter timeline reader:
+
+https://github.com/jaybeaton/tweetledum
 
 ***
 
-Only the contents of the tweetledum/ directory are needed on the web server.
+Only the contents of the tweetledummer/ directory are needed on the web server.
 
 ***
 
-Create your key file by copying the default file here:
+Create an app password in Bluesky here:
 
-tweetledum/tldlib/keys/default.tweetledee_keys.php
+https://bsky.app/settings/app-passwords
+
+Create your settings file by copying the default file here:
+
+tweetledummer/default.settings.php
 
 To this in the same directory:
 
-tweetledum/tldlib/keys/tweetledee_keys.php
+tweetledummer/settings.php
+
+Add your app password and Bluesky username to the settings file.
 
 You must create a database table using the SQL found in db/tweetledummer.sql and
-add your database credentials to the key file mentioned above.
+add your database credentials to the settings file mentioned above.
 
+***
 
-Uses jquery-visible plugin:
+Tweetledummer uses
 
+- cjrasmussen/BlueskyApi library:
+https://github.com/cjrasmussen/BlueskyApi
+
+- jquery-visible plugin:
 https://github.com/customd/jquery-visible
