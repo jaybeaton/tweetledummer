@@ -37,7 +37,7 @@ class TweetledummerController {
 
     public function fetchPosts() {
 
-        $max_post_id = $this->tweetledummer->getMaxPostId();
+        $max_post_id = $this->tweetledummer->getMaxPostId(FALSE);
 
         $sql = "REPLACE INTO tweetledummer_posts
             (id, `user`, author, body, `data`, `timestamp`)
@@ -46,14 +46,14 @@ class TweetledummerController {
         $query = $this->db->prepare($sql);
 
         $num = 0;
-        if (!$posts = $this->tweetledummer->getTimeline(['limit' => 100])) {
+        if (!$posts = $this->tweetledummer->getTimeline(['limit' => 100], $max_post_id)) {
             return 0;
         }
         foreach ($posts as $post) {
 
-            if ($max_post_id > $post['post_id']) {
-                continue;
-            }
+//            if ($max_post_id > $post['id']) {
+//                continue;
+//            }
 
             $link_url = '';
             $link_url_expanded = '';
@@ -71,6 +71,7 @@ class TweetledummerController {
             $quoted = [];
 
             $data_field = array(
+                'post_id' => $post['post_id'],
                 'author_display_name' => $post['author_display_name'],
                 'author_handle' => $post['author_handle'],
                 'author_url' => $post['author_url'],
@@ -88,7 +89,7 @@ class TweetledummerController {
 
             try {
                 $query->bind_param('sssssi',
-                    $post['post_id'],
+                    $post['id'],
                     $this->tweetledummer->blueskyUsername,
                     $author,
                     $post['text'],
@@ -256,7 +257,7 @@ EOT;
             $author[$key] = htmlentities($author[$key]);
         }
         $post_author_link= '<a href="' . $author['author_url'] . '">' . $author['author_display_name'] . ' (@' . $author['author_handle'] . ')</a>';
-        $post_body = htmlentities($body);
+        $post_body = nl2br(htmlentities($body));
         return <<<EOT
     <div class="extra-info">
         <div class="extra-info-body">

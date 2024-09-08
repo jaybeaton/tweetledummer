@@ -1,5 +1,5 @@
 CREATE TABLE `tweetledummer_posts` (
-  `id` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL,
+  `id` varchar(64) COLLATE utf8mb4_bin DEFAULT NULL,
   `user` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
   `author` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
   `body` text COLLATE utf8mb4_bin,

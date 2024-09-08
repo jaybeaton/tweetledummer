@@ -113,7 +113,7 @@ class TweetledummerBluesky {
         return $this->blueskyApi->request('GET', 'app.bsky.actor.getProfile', $args);
     }
 
-    public function getTimeline($args = [], $all_results = FALSE) {
+    public function getTimeline($args = [], $since = FALSE) {
 
         static $posts = [];
 
@@ -129,22 +129,35 @@ class TweetledummerBluesky {
         ];
         $result = $this->blueskyApi->request('GET', 'app.bsky.feed.getTimeline', $args);
         if (!isset($result->feed)) {
-            return FALSE;
+            return [];
         }
 
+        $found = FALSE;
         foreach ($result->feed as $item) {
             $data = $this->getPostData($item);
             $data['full'] = $item;
             $posts[] = $data;
+
+//            print "'{$data['id']}' < '{$since}' ????<br>\n";
+
+            if ($since !== FALSE && strnatcmp($data['id'], $since) <= 0) {
+//                print "*** EXITING: '{$data['id']}' < '{$since}'<br><br>\n";
+                $found = TRUE;
+                break;
+            }
         } // Lop thru posts.
 
         $num_posts = count($posts);
         $cursor = $result->cursor ?? NULL;
 
-//        if ($all_results && $cursor && $num_posts < 2000) {
-        if ($all_results && $cursor) {
+        if ($num_posts > 500) {
+            $cursor = FALSE;
+        }
+
+        if ($since !== FALSE && !$found && $cursor) {
             $args['cursor'] = $cursor;
-            $this->getTimeline($args, TRUE);
+//            print "*** CALL AGAIN: cursor='{$cursor}'<br><br>\n";
+            $this->getTimeline($args, $since);
         }
 
         return $posts;
@@ -166,8 +179,11 @@ class TweetledummerBluesky {
         } else {
             $created = '???';
         }
+        $post_id = $this->getPostIdFromUri($post->uri);
         $data = [
-            'post_id' => $this->getPostIdFromUri($post->uri),
+            'id' => NULL,
+            'post_id' => $post_id,
+            'created_at' => $created_at,
             'uri' => $post->uri,
             'cid' => $post->cid ?? '',
             'post_url' => $this->getPostUrl($post),
@@ -191,6 +207,7 @@ class TweetledummerBluesky {
                 'author_display_name' => $item->reason->by->displayName,
                 'author_url' => $this->getAuthorUrl($item->reason->by),
             ];
+            $created_at = $item->reason->indexedAt;
         }
         if (!$is_reply) {
             if (!empty($post->embed->record->cid)) {
@@ -200,7 +217,15 @@ class TweetledummerBluesky {
                 $data['reply_to'] = $this->getPostData($item->reply->parent, TRUE);
             }
         }
+        $data['id'] = $this->getUniqueID($created_at, $post_id);
         return $data;
+    }
+
+    public function getUniqueID($created_at, $post_id) {
+        $timestamp = preg_replace('/[^0-9]/', '', $created_at);
+        $timestamp = str_pad($timestamp, 20, '0', STR_PAD_RIGHT);
+        $post_id = str_pad($post_id, 20, '0', STR_PAD_LEFT);
+        return $timestamp . '-' . $post_id;
     }
 
     public function getPostIdFromUri($uri) {
@@ -263,25 +288,14 @@ EOT;
             $post['created'] ?? '',
         );
 
-//        $embed = <<<EOT
-//<blockquote class="bluesky-embed {$class}"
-//  data-bluesky-uri="{$post['uri']}"
-//  data-bluesky-cid="{$post['cid']}">
-//  <p lang="en">{$post['text']}
-//  <br><br>
-//  <a href="{$post['post_url']}?ref_src=embed">[image or embed]</a>
-//  </p>&mdash; {$post['author_display_name']}
-//  (<a href="{$post['author_url']}?ref_src=embed">@{$post['author_handle']}</a>)
-//  <a href="{$post['post_url']}}?ref_src=embed">{$post['created']}</a>
-//</blockquote>
-//<script async src="https://embed.bsky.app/static/embed.js" charset="utf-8"></script>
-//EOT;
     }
 
-    public function getMaxPostId() {
+    public function getMaxPostId($unread = TRUE) {
         $sql = "SELECT MAX(id) AS max_id
-          FROM tweetledummer_posts
-          WHERE `read` = 0 ";
+          FROM tweetledummer_posts ";
+        if ($unread) {
+            $sql .= "WHERE `read` = 0 ";
+        }
         $max_id = $this->db->query($sql)->fetch_object()->max_id;
         return $max_id;
     }
