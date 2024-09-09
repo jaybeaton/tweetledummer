@@ -109,6 +109,7 @@ class BlueskyApi
 		switch ($type) {
 			case 'POST':
 				curl_setopt($c, CURLOPT_POST, 1);
+				curl_setopt($c, CURLOPT_POSTFIELDS, NULL);
 				break;
 			case 'GET':
 				curl_setopt($c, CURLOPT_HTTPGET, 1);
@@ -134,7 +135,7 @@ class BlueskyApi
 		$parts = explode("\r\n\r\n", $result);
 		if ($headers = array_shift($parts)) {
 			$headers = explode("\r\n", $headers);
-			//print '<pre><hr>$headers<hr>' . print_r($headers, true) . '<hr></pre>';
+			//print '<pre><hr>$headers<hr>' . $url . "\n<hr>" . print_r($headers, true) . '<hr></pre>';
 		}
 		$data = implode("\r\n\r\n", $parts);
 
