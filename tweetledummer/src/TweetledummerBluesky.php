@@ -7,7 +7,12 @@ use cjrasmussen\BlueskyApi\BlueskyApi;
 class TweetledummerBluesky {
 
     const DATE_FORMAT_DISPLAY = 'M j, Y \a\t g:i A';
+
     const DATE_FORMAT_DB = 'Y-m-d H:i:s';
+
+    const LINK_MAX_LENGTH = 60;
+
+    const ELLIPSIS = '…';
 
     private $settings = [];
 
@@ -190,7 +195,7 @@ class TweetledummerBluesky {
             'text' => $post->record->text ?? ($post->value->text ?? NULL),
             'author_did' => $post->author->did ?? '',
             'author_handle' => $post->author->handle ?? '',
-            'author_display_name' => $post->author->displayName ?? '',
+            'author_display_name' => $post->author->displayName ?? ($post->author->handle ?? ''),
             'author_avatar' => $post->author->avatar ?? '',
             'author_url' => $this->getAuthorUrl($post->author ?? NULL),
             'link_embed' => $post->record->embed->external->uri ?? NULL,
@@ -304,15 +309,6 @@ class TweetledummerBluesky {
             $post[$key] = htmlentities($post[$key]);
         }
         $post['text'] = nl2br($post['text']);
-        if ($post['reply_count'] == 0) {
-            $view_link = '<a href="' . $post['post_url'] . '">View on Bluesky</a>';
-        }
-        elseif ($post['reply_count'] == 1) {
-            $view_link = '<a href="' . $post['post_url'] . '">Read 1 reply on Bluesky</a>';
-        }
-        else {
-            $view_link = '<a href="' . $post['post_url'] . '">Read ' . $post['reply_count'] . ' replies on Bluesky</a>';
-        }
         foreach (['like', 'repost', 'reply'] as $type) {
             $post[$type . '_count'] = (!empty($post[$type . '_count'])) ?: '';
             if ($post[$type . '_count'] > 1000) {
@@ -326,7 +322,7 @@ class TweetledummerBluesky {
         $images = '';
         if ($post['images']) {
             $images_class = (count($post['images']) > 1) ? 'multiple' : 'single';
-            $images = '<div class="tweetledummer-post__images tweetledummer-post__images__' . $images_class . '">';
+            $images = '<div class="tweetledummer-post__images tweetledummer-post__images--' . $images_class . '">';
             foreach ($post['images'] as $image) {
                 $images .= "\n" . '<a href="' . $image['url'] . '"><img alt="' . htmlentities($image['alt']) . '" src="' . $image['url'] . '"></a>' . "\n";
             }
@@ -339,13 +335,22 @@ class TweetledummerBluesky {
                 $image = '<img alt="' . htmlentities($post['embed']['description']) . '" src="' . $post['embed']['thumb'] . '">';
             }
             $host = parse_url($post['embed']['uri'], PHP_URL_HOST);
+            if (!empty($post['embed']['description'])) {
+                $description = $post['embed']['description'];
+            }
+            else {
+                $description = $post['embed']['uri'];
+                if (strlen($description) > self::LINK_MAX_LENGTH - 1) {
+                    $description = substr($description, 0, self::LINK_MAX_LENGTH - 1) . self::ELLIPSIS;
+                }
+            }
             $embed = '<div class="tweetledummer-post__embed">'
                 . '<a href="' . $post['embed']['uri'] . '">'
                 . $image
                 . '<div class="embed-text">'
                 . '<div class="embed-source">' . htmlentities($host) . '</div>'
                 . '<div class="embed-title">' . htmlentities($post['embed']['title']) . '</div>'
-                . '<div class="embed-description">' . htmlentities($post['embed']['description']) . '</div>'
+                . '<div class="embed-description">' . htmlentities($description) . '</div>'
                 . '</div>'
                 . '</a>'
                 . '</div>';
@@ -363,18 +368,27 @@ class TweetledummerBluesky {
             $reposted_by = '<div class="tweetledummer-post__reposted-by"><img width=20" height="20" src="images/repost.svg"> '
                 . '<a href="' . $post['repost']['author_url'] . '">Reposted by ' . htmlentities($post['repost']['author_display_name']) . '</a>'
                 . '</div>';
-
-//            'author_handle' => $item->reason->by->handle,
-//            'author_display_name' => $item->reason->by->displayName,
-//            'author_url' => $this->getAuthorUrl($item->reason->by),
-
         }
-//        if ($since = $this->timeSince($post['timestamp'], 2)) {
-//            $since .= ' ago';
-//        }
-//        else {
-//            $since = 'now';
-//        }
+
+        $link = '';
+        if (!empty($post['embed']['uri'])) {
+            $link_icon = 'link-solid.svg';
+        }
+        elseif (!empty($post['quoted'])) {
+            $link_icon = 'quote-left-solid.svg';
+        }
+        elseif (!empty($post['reply_to'])) {
+            $link_icon = 'reply-all-solid.svg';
+        }
+        else {
+            $link_icon = 'link-solid.svg';
+        }
+        if (!empty($post['link_url_expanded'])) {
+            $link = '<a href="' . $post['link_url_expanded'] . '"><img width=20" height="20" src="images/' . $link_icon .'"></a>';
+        } elseif (!empty($post['link_url'])) {
+            $link = '<a href="' . $post['link_url'] . '"><img width=20" height="20" src="images/' . $link_icon .'"></a>';
+        }
+
         $age = $this->timeSince($post['timestamp'], 1);
 
         return <<<EOT
@@ -406,6 +420,10 @@ class TweetledummerBluesky {
                     {$post['like_count']}
                     {$post['repost_count']}
                     {$post['reply_count']}
+                </div>
+                <div class="tweetledummer-post__links">
+                    {$link}
+                    <a href="{$post['post_url']}"><img width=20" height="20" src="images/bsky.svg"></a>
                 </div>
             </div>
         </div>

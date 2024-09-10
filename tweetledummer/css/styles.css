@@ -26,7 +26,7 @@ body {
 }
 .main {
   float: left;
-  width: 600px;
+  width: 710px;
   margin-left: 170px;
 }
 #unread-count {
@@ -48,7 +48,7 @@ body {
 }
 .tweetledum-feed {
   margin: 20px 0;
-  width: 545px;
+  width: 694px;
 }
 #load-more, .bulk-save {
   cursor: pointer;
@@ -90,20 +90,20 @@ body {
   margin-top: 5px;
 }
 .tweetledum-tweet {
-  margin-bottom: 30px;
-  padding: 10px 20px;
-  border: 2px solid transparent;
+  margin-bottom: 5px;
+  padding: 10px 20px 10px 0;
+  /*border: 2px solid transparent;*/
 }
-.tweetledum-tweet:hover {
-  border-radius: 10px;
-  border: 2px solid #999;
-  background-color: #ccc;
-}
-.tweetledum-tweet.active {
-  border-radius: 10px;
-  border: 2px solid #999;
-  background-color: #ccc;
-}
+/*.tweetledum-tweet:hover {*/
+/*  border-radius: 10px;*/
+/*  border: 2px solid #999;*/
+/*  background-color: #ccc;*/
+/*}*/
+/*.tweetledum-tweet.active {*/
+/*  border-radius: 10px;*/
+/*  border: 2px solid #999;*/
+/*  background-color: #ccc;*/
+/*}*/
 .tweetledum-tweet .extra-info {
   margin: 12px 0;
 }
@@ -167,9 +167,13 @@ body {
 .tweetledummer-post-wrapper {
   max-width: 650px;
   background-color: #fff;
+  border: 3px solid transparent;
   border-radius: 12px;
 }
-
+.tweetledum-tweet.active > .tweetledummer-post-wrapper,
+.tweetledum-tweet:hover > .tweetledummer-post-wrapper {
+  border: 3px solid #990000;
+}
 .quoted .tweetledummer-post {
   /*margin-left: 50px;*/
   border: 1px solid #e5e7eb;
@@ -178,12 +182,15 @@ body {
   overflow: hidden;
 }
 .quoted .tweetledummer-post .tweetledummer-post__body {
-  font-size: 16px;
+  font-size: 18px;
 }
 .quoted .tweetledummer-post__footer {
   display: none;
 }
 .tweetledummer-post__reposted-by {
+  display: flex;
+  align-items: center;
+  gap: 5px;
   padding: 16px 0 0 16px;
 }
 .tweetledummer-post__reposted-by a {
@@ -197,7 +204,7 @@ body {
 .reply-to .tweetledummer-post__left div {
   height: 100%;
   width: 10px;
-  margin: 0 0 0 30px;
+  margin: -6px 0 0 30px;
   border-left: 1px solid rgb(54, 75, 97);
 }
 .tweetledummer-post {
@@ -207,16 +214,21 @@ body {
 .tweetledummer-post__body {
 }
 
+.tweetledummer-post__main {
+  /*width: 100%;*/
+  flex-grow: 1;
+}
+
 .tweetledummer-post {
   display: flex;
   flex-flow: nowrap;
   /*background-color: #fee;*/
-  padding: 9px 16px 16px 16px;
+  padding: 5px 16px 5px 16px;
   margin-bottom: 10px;
 }
 .tweetledummer-post__meta {
   display: flex;
-  flex-flow: nowrap;
+  flex-flow: wrap;
   gap: 4px;
   align-items: center;
   padding-bottom: 10px;
@@ -276,11 +288,31 @@ body {
   margin-top: 20px;
   overflow: hidden;
 }
-.tweetledummer-post__images__multiple img {
-  width: 45%;
+.tweetledummer-post__images--multiple {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 5px;
 }
-.tweetledummer-post__images__single img {
+.tweetledummer-post__images--multiple img {
+  object-fit: cover;
+  height: 100%;
   width: 100%;
+  position: absolute;
+}
+.tweetledummer-post__images--multiple a {
+  position: relative;
+  height: 0;
+  padding-bottom: 269px;
+  flex: 1 0 200px;
+  overflow: hidden;
+}
+.tweetledummer-post__images--single img {
+  display: block;
+  width: 100%;
+}
+.tweetledummer-post__images--single a {
+  width: 100%;
+  display: block;
 }
 
 .tweetledummer-post__footer {
@@ -288,23 +320,24 @@ body {
   padding-top: 9px;
   margin: 10px 0 -6px;
   width: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: baseline;
+  justify-content: space-between;
 }
 
 .reply-to .tweetledummer-post__footer {
   display: none;
 }
 
-.tweetledummer-post__footer .tweetledummer-post__link a {
-  font-weight: bold;
-  font-size: 14px;
-  color: #0a7aff;
+.tweetledummer-post__footer a {
   text-decoration: none;
 }
-.tweetledummer-post__footer .tweetledummer-post__link a:hover {
+.tweetledummer-post__footer a:hover {
   text-decoration: underline;
 }
 
-.tweetledummer-post__footer .tweetledummer-post__stats {
+.tweetledummer-post__stats {
   display: flex;
   flex-wrap: nowrap;
   gap: 20px;
@@ -321,6 +354,14 @@ body {
   display: inline-block;
   margin-left: 6px;
 }
+
+.tweetledummer-post__links {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 20px;
+}
+
+
 .tweetledummer-post__embed {
   border: 1px solid #e5e7eb;
   border-radius: 12px;
@@ -328,21 +369,21 @@ body {
   overflow: hidden;
 }
 .tweetledummer-post__embed .embed-text {
-  margin: 16px;
+  margin: 18px;
 }
 .tweetledummer-post__embed a {
   text-decoration: none;
   color: #000;
 }
 .tweetledummer-post__embed .embed-title {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
 }
 .tweetledummer-post__embed .embed-source {
-  font-size: 14px;
+  font-size: 16px;
 }
 .tweetledummer-post__embed .embed-description {
-  font-size: 14px;
+  font-size: 16px;
 }
 .tweetledummer-post__embed img {
   width: 100%;

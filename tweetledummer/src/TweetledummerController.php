@@ -67,23 +67,15 @@ class TweetledummerController {
             } elseif (!empty($post['reply_to']['post_url'])) {
                 $link_url = $post['post_url'];
                 $link_url_expanded = $post['reply_to']['post_url'];
+            } elseif (!empty($post['quoted']['post_url'])) {
+                $link_url = $post['post_url'];
+                $link_url_expanded = $post['quoted']['post_url'];
             }
-            $quoted = [];
 
-            $data_field = array(
-                'post_id' => $post['post_id'],
-                'author_display_name' => $post['author_display_name'],
-                'author_handle' => $post['author_handle'],
-                'author_url' => $post['author_url'],
-                'uri' => $post['uri'],
-                'cid' => $post['cid'],
-                'post_url' => $post['post_url'],
+            $data_field = $post + [
                 'link_url' => $link_url,
                 'link_url_expanded' => $link_url_expanded,
-                'quoted' => $quoted,
-                'reply_to' => $post['reply_to'],
-                'reposted' => $post['repost'],
-            );
+            ];
             $data_field = serialize($data_field);
             $author = (!empty($post['repost']['author_handle'])) ? $post['repost']['author_handle'] : $post['author_handle'];
 
@@ -174,71 +166,17 @@ class TweetledummerController {
             $date->setTimezone($tz);
             $row['data']['created'] = $date->format(self::DATE_FORMAT_DISPLAY);
 
-            $embed = $this->tweetledummer->getEmbed($row['data'])
-             . $this->getExtraInfoMarkup($row['data'], $row['body']);
-
-
-            $quoted = '';
-            if (!empty($row['data']['quoted'])) {
-                $quoted = $this->tweetledummer->getEmbed($row['data']['quoted'], 'quoted');
-            }
-
-            $reply_to = '';
-            if (!empty($row['data']['reply_to'])) {
-                $reply_to = $this->tweetledummer->getEmbed($row['data']['reply_to'], 'reply-to')
-                  . $this->getExtraInfoMarkup($row['data']['reply_to'], $row['data']['reply_to']['text']);
-            }
-
             $link_url = NULL;
-            $link = NULL;
             if (!empty($row['data']['link_url_expanded'])) {
                 $link_url = $row['data']['link_url_expanded'];
             } elseif (!empty($row['data']['link_url'])) {
                 $link_url = $row['data']['link_url'];
             }
-
-            if ($link_url && (!preg_match('~^https?://bsky.app/~', $link_url) || !empty($row['data']['retweeted']))) {
-                $display_url = preg_replace('~^https?://~', '', $link_url);
-                if (strlen($display_url) > $max_display_link_len) {
-                    $display_url = htmlentities(substr($display_url, 0, ($max_display_link_len - 1))) . '&hellip;';
-                } else {
-                    $display_url = htmlentities($display_url);
-                }
-                $link = '<a href="' . $link_url . '">' . $display_url . '</a>';
-            } else {
-                $link_url = $row['data']['post_url'];
-            }
-
-            if ($link) {
-                $embed = '<div class="link-url">'
-                    . $link
-                    . '</div>'
-                    . $embed;
-            }
-
-            if (!empty($row['data']['reposted'])) {
-                $embed = '<div class="retweet">'
-                    . 'Reposted by <a href="' . $row['data']['reposted']['author_url'] . '">' . htmlentities($row['data']['reposted']['author_display_name'] . ' (@' . $row['data']['reposted']['author_handle'] . ')') . '</a>'
-                    . '</div>'
-                    . $embed;
-            }
-
-            if (!empty($quoted)) {
-                $embed .= '<details class="tweetledum-quoted"><summary>Quoted</summary>'
-                    . $quoted
-                    . '</details>';
-            }
-
-            if (!empty($reply_to)) {
-                $embed = '<div class="tweetledum-reply-to">Reply<div class="tweetledum-reply-to-embed">'
-                    . $reply_to
-                    . '</div></div>'
-                    . $embed;
-            }
+            $markup = $this->tweetledummer->showPost($row['data']);
 
             print <<<EOT
 <div class="tweetledum-tweet tweetledum-new {$first_class}" id="tweetledum-{$row['id']}" data-id="{$row['id']}" data-url="{$link_url}" data-tweet="{$row['data']['post_url']}">
-{$embed}
+{$markup}
 </div>
 
 
