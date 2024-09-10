@@ -191,15 +191,45 @@ class TweetledummerBluesky {
             'author_did' => $post->author->did ?? '',
             'author_handle' => $post->author->handle ?? '',
             'author_display_name' => $post->author->displayName ?? '',
+            'author_avatar' => $post->author->avatar ?? '',
             'author_url' => $this->getAuthorUrl($post->author ?? NULL),
             'link_embed' => $post->record->embed->external->uri ?? NULL,
             'link_facet' => $post->record->facets[0]->features[0]->uri ?? NULL,
+            'embed' => [],
+            'images' => [],
             'created' => $created,
             'timestamp' => $timestamp,
+            'repost_count' => $post->repostCount ?? 0,
+            'like_count' => $post->likeCount ?? 0,
+            'reply_count' => $post->replyCount ?? 0,
+            'quote_count' => $post->quoteCount ?? 0,
             'repost' => [],
             'quoted' => [],
             'reply_to' => [],
         ];
+        if (!empty($post->record->embed->external->uri)) {
+            $data['embed'] = [
+                'uri' => $post->record->embed->external->uri,
+                'title' => $post->record->embed->external->title,
+                'description' => $post->record->embed->external->description,
+                'thumb' => NULL,
+            ];
+            if (!empty($post->record->embed->external->thumb->ref->{'$link'})) {
+                $mime_type = explode('/', $post->record->embed->external->thumb->mimeType)[1] ?? '';
+                $data['embed']['thumb'] = 'https://cdn.bsky.app/img/feed_thumbnail/plain/' . $data['author_did'] . '/' . $post->record->embed->external->thumb->ref->{'$link'} . '@' . $mime_type;
+            }
+        }
+        if (!empty($post->record->embed->images)) {
+//            \Kint::dump($post->record->embed->images);
+            foreach ($post->record->embed->images as $image) {
+                $mime_type = explode('/', $image->image->mimeType)[1] ?? '';
+                $url = 'https://cdn.bsky.app/img/feed_thumbnail/plain/' . $data['author_did'] . '/' . $image->image->ref->{'$link'} . '@' . $mime_type;
+                $data['images'][] = [
+                    'url' => $url,
+                    'alt' => $image->alt,
+                ];
+            }
+        }
         $reason_type = $item->reason->{'$type'} ?? NULL;
         if ($reason_type == 'app.bsky.feed.defs#reasonRepost') {
             $data['repost'] = [
@@ -262,6 +292,99 @@ class TweetledummerBluesky {
         return $url;
     }
 
+    public function showPost($post, $class = '', $author = NULL, $body = NUll, $stats = NULL) {
+        foreach (['author_display_name', 'author_handle', 'text'] as $key) {
+            $post[$key] = htmlentities($post[$key]);
+        }
+        $post['text'] = nl2br($post['text']);
+        if ($post['reply_count'] == 0) {
+            $view_link = '<a href="' . $post['post_url'] . '">View on Bluesky</a>';
+        }
+        elseif ($post['reply_count'] == 1) {
+            $view_link = '<a href="' . $post['post_url'] . '">Read 1 reply on Bluesky</a>';
+        }
+        else {
+            $view_link = '<a href="' . $post['post_url'] . '">Read ' . $post['reply_count'] . ' replies on Bluesky</a>';
+        }
+        foreach (['like', 'repost', 'reply'] as $type) {
+            if (!empty($post[$type . '_count'])) {
+                if ($post[$type . '_count'] > 1000) {
+                    $post[$type . '_count'] = number_format($post[$type . '_count']/1000, 1) . 'K';
+                }
+                $post[$type . '_count'] = '<div class="tweetledummer-post__stat tweetledummer-post__' . $type . '">'
+                    . '<img width=20" height="20" src="images/' . $type . '.svg">'
+                    . '<div>' . $post[$type . '_count'] . '</div>'
+                    . '</div>';
+            }
+            else {
+                $post[$type . '_count'] = '';
+            }
+        }
+        $images = '';
+        if ($post['images']) {
+            $images_class = (count($post['images']) > 1) ? 'multiple' : 'single';
+            $images = '<div class="tweetledummer-post__images tweetledummer-post__images__' . $images_class . '">';
+            foreach ($post['images'] as $image) {
+                $images .= "\n" . '<a href="' . $image['url'] . '"><img alt="' . htmlentities($image['alt']) . '" src="' . $image['url'] . '"></a>' . "\n";
+            }
+            $images .= '</div>';
+        }
+        $embed = '';
+        if ($post['embed']) {
+            $image = '';
+            if (!empty($post['embed']['thumb'])) {
+                $image = '<img alt="' . htmlentities($post['embed']['description']) . '" src="' . $post['embed']['thumb'] . '">';
+            }
+            $host = parse_url($post['embed']['uri'], PHP_URL_HOST);
+            $embed = '<div class="tweetledummer-post__embed">'
+                . '<a href="' . $post['embed']['uri'] . '">'
+                . $image
+                . '<div class="embed-text">'
+                . '<div class="embed-source">' . htmlentities($host) . '</div>'
+                . '<div class="embed-title">' . htmlentities($post['embed']['title']) . '</div>'
+                . '<div class="embed-description">' . htmlentities($post['embed']['description']) . '</div>'
+                . '</div>'
+                . '</a>'
+                . '</div>';
+        }
+
+        if ($since = $this->timeSince($post['timestamp'], 2)) {
+            $since .= ' ago';
+        }
+        else {
+            $since = 'now';
+        }
+
+        return <<<EOT
+<div class=tweetledummer-post-wrapper {$class}">
+    <div class="tweetledummer-post">
+        <div class="tweetledummer-post__author-header">
+            <a class="tweetledummer-post__author-image" href="{$post['author_url']}"><img width="40" height="40" src="{$post['author_avatar']}"></a>
+            <div class="tweetledummer-post__author">
+                <div class="tweetledummer-post__author-name"><a href="{$post['author_url']}">{$post['author_display_name']}</a></div>
+                <div class="tweetledummer-post__author-handle"><a href="{$post['author_url']}">@{$post['author_handle']}</a></div>
+            </div>
+            <div class="tweetledummer-post__logo-link"><a href="{$post['post_url']}"><img width="40" height="32" src="images/bsky.svg"></a></div>
+        </div>
+        <div class="tweetledummer-post__body">
+            {$post['text']}
+            {$embed}
+            {$images}
+        </div>
+        <div class="tweetledummer-post__created">{$post['created']} ({$since})</div>
+        <div class="tweetledummer-post__footer">
+            <div class="tweetledummer-post__stats">
+                {$post['like_count']}
+                {$post['repost_count']}
+                {$post['reply_count']}
+            </div>
+            <div class="tweetledummer-post__link">{$view_link}</div>
+        </div>
+    </div>
+</div>
+EOT;
+    }
+
     public function getEmbed($post, $class = '') {
         $embed = <<<EOT
 <blockquote class="bluesky-embed %s" 
@@ -298,6 +421,32 @@ EOT;
         }
         $max_id = $this->db->query($sql)->fetch_object()->max_id;
         return $max_id;
+    }
+
+    private function timeSince($timestamp, $level = 6) {
+        $date = new \DateTime();
+        $date->setTimestamp($timestamp);
+        $date = $date->diff(new \DateTime());
+        // build array
+        $since = array_combine(['year', 'month', 'day', 'hour', 'minute', 'second'], explode(',', $date->format('%y,%m,%d,%h,%i,%s')));
+        // remove empty date values
+        $since = array_filter($since);
+        // output only the first x date values
+        $since = array_slice($since, 0, $level);
+        // build string
+        $last_key = key(array_slice($since, -1, 1, true));
+        $string = '';
+        foreach ($since as $key => $val) {
+            // separator
+            if ($string) {
+                $string .= ($key != $last_key) ? ', ' : ' and ';
+            }
+            // set plural
+            $key .= $val > 1 ? 's' : '';
+            // add date value
+            $string .= $val . ' ' . $key;
+        }
+        return $string;
     }
 
 }

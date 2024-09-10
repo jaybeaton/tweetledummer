@@ -160,12 +160,146 @@ body {
   display: none !important;
 }
 
-/*<div class="extra-info-author-info">*/
-/*<img width="30" height="30" src="images/circle-user-regular.svg">*/
-/*<div class="extra-info-author">*/
-/*<div class="extra-info-author-name">{$author['author_display_name']}</div>*/
-/*<div class="extra-info-author-handle">@{$author['author_handle']}</div>*/
-/*</div>*/
+
+
+
+
+.tweetledummer-post-wrapper {
+  max-width: 600px;
+}
+.tweetledummer-post {
+  margin: 12px 0;
+}
+.tweetledummer-post,
+.tweetledummer-post__body {
+}
+
+.tweetledummer-post {
+  display: block;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 9px 16px 16px 16px;
+  margin-bottom: 10px;
+}
+.tweetledummer-post__author-header {
+  display: flex;
+  flex-flow: nowrap;
+  align-items: center;
+  padding-bottom: 10px;
+}
+.tweetledummer-post__logo-link {
+  margin-left: auto;
+}
+.tweetledummer-post__author a {
+  color: #000;
+  text-decoration: none;
+}
+.tweetledummer-post__author a:hover {
+  text-decoration: underline;
+}
+.tweetledummer-post__author-link {
+  text-align: right;
+}
+.tweetledummer-post__author-name {
+  font-size: 17px;
+  font-weight: bold;
+  margin-bottom: -4px;
+}
+.tweetledummer-post__author-handle a {
+  font-size: 15px;
+  color: rgb(66, 87, 108);
+}
+.tweetledummer-post__author-image img {
+  margin: 6px 10px 0 0;
+  border-radius: 50%;
+}
+.tweetledummer-post__body {
+  font-size: 18px;
+  font-family: ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+}
+.tweetledummer-post__created {
+  font-size: .875rem;
+  line-height: 1.25rem;
+  color: #57426c;
+  margin-top: 12px;
+}
+.tweetledummer-post__images__multiple img {
+  width: 45%;
+}
+.tweetledummer-post__images__single img {
+  width: 100%;
+}
+
+.tweetledummer-post__footer {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 9px;
+  margin: 10px 0 -6px;
+  display: flex;
+  flex-flow: nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tweetledummer-post__footer .tweetledummer-post__link a {
+  font-weight: bold;
+  font-size: 14px;
+  color: #0a7aff;
+  text-decoration: none;
+}
+.tweetledummer-post__footer .tweetledummer-post__link a:hover {
+  text-decoration: underline;
+}
+
+.tweetledummer-post__footer .tweetledummer-post__stats {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 20px;
+}
+.tweetledummer-post__footer .tweetledummer-post__stat {
+  display: flex;
+  flex-flow: nowrap;
+  align-items: center;
+}
+.tweetledummer-post__footer .tweetledummer-post__stat img {
+  display: inline-block;
+}
+.tweetledummer-post__footer .tweetledummer-post__stat div {
+  display: inline-block;
+  margin-left: 6px;
+}
+.tweetledummer-post__embed {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  margin-top: 20px;
+  overflow: hidden;
+}
+.tweetledummer-post__embed .embed-text {
+  margin: 16px;
+}
+.tweetledummer-post__embed a {
+  text-decoration: none;
+  color: #000;
+}
+.tweetledummer-post__embed .embed-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+.tweetledummer-post__embed .embed-source {
+  font-size: 14px;
+}
+.tweetledummer-post__embed .embed-description {
+  font-size: 14px;
+}
+.tweetledummer-post__embed img {
+  width: 100%;
+}
+
+/*tweetledummer-post__images__single*/
+/*tweetledummer-post__images__multiple*/
+
+
+
+
 
 
 .loading-message {
