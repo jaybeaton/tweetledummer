@@ -7,6 +7,9 @@ include 'src/TweetledummerController.php';
 
 $controller = new TweetledummerController($settings);
 
+// Fetch posts, too!
+$num = $controller->fetchPosts();
+
 $id = $_GET['id'] ?? 0;
 $author = $_GET['author'] ?? '';
 $list = $_GET['list'] ?? '';
