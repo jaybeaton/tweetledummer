@@ -175,7 +175,10 @@ class TweetledummerBluesky {
         $utc = new \DateTimeZone('UTC');
         $tz = new \DateTimeZone('America/New_York');
         $created_at = $post->record->createdAt ?? ($post->value->createdAt ?? NULL);
-        $timestamp = ($created_at) ? strtotime($created_at) : FALSE;
+        $indexed_at = $post->indexedAt ?? NULL;
+        $created_at_timestamp = ($created_at) ? strtotime($created_at) : time();
+        $indexed_at_timestamp = ($indexed_at) ? strtotime($indexed_at) : time();
+        $timestamp = min($created_at_timestamp, $indexed_at_timestamp);
         if ($timestamp !== FALSE) {
             $date = new \DateTime('@' . $timestamp, $utc);
             $date->setTimezone($tz);
