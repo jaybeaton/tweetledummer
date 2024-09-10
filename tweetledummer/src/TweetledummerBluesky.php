@@ -219,14 +219,20 @@ class TweetledummerBluesky {
                 $data['embed']['thumb'] = 'https://cdn.bsky.app/img/feed_thumbnail/plain/' . $data['author_did'] . '/' . $post->record->embed->external->thumb->ref->{'$link'} . '@' . $mime_type;
             }
         }
-        if (!empty($post->record->embed->images)) {
+        $images = $post->record->embed->images ?? $post->record->embed->media->images ?? $post->embeds[0]->images ?? NULL;
+        if ($images) {
 //            \Kint::dump($post->record->embed->images);
-            foreach ($post->record->embed->images as $image) {
-                $mime_type = explode('/', $image->image->mimeType)[1] ?? '';
-                $url = 'https://cdn.bsky.app/img/feed_thumbnail/plain/' . $data['author_did'] . '/' . $image->image->ref->{'$link'} . '@' . $mime_type;
+            foreach ($images as $image) {
+                if (!empty($image->thumb)) {
+                    $url = $image->thumb;
+                }
+                else {
+                    $mime_type = explode('/', $image->image->mimeType)[1] ?? '';
+                    $url = 'https://cdn.bsky.app/img/feed_thumbnail/plain/' . $data['author_did'] . '/' . $image->image->ref->{'$link'} . '@' . $mime_type;
+                }
                 $data['images'][] = [
                     'url' => $url,
-                    'alt' => $image->alt,
+                    'alt' => $image->alt ?? '',
                 ];
             }
         }
@@ -241,6 +247,7 @@ class TweetledummerBluesky {
         }
         if (!$is_reply) {
             if (!empty($post->embed->record->cid)) {
+                $data['quoted_record'] = $post->embed->record;
                 //$post->embed->record->value->{'$type'} = 'app.bsky.feed.post';
                 $data['quoted'] = $this->getPostData($post->embed->record, TRUE);
             } elseif (!empty($item->reply->parent)) {
@@ -307,18 +314,14 @@ class TweetledummerBluesky {
             $view_link = '<a href="' . $post['post_url'] . '">Read ' . $post['reply_count'] . ' replies on Bluesky</a>';
         }
         foreach (['like', 'repost', 'reply'] as $type) {
-            if (!empty($post[$type . '_count'])) {
-                if ($post[$type . '_count'] > 1000) {
-                    $post[$type . '_count'] = number_format($post[$type . '_count']/1000, 1) . 'K';
-                }
-                $post[$type . '_count'] = '<div class="tweetledummer-post__stat tweetledummer-post__' . $type . '">'
-                    . '<img width=20" height="20" src="images/' . $type . '.svg">'
-                    . '<div>' . $post[$type . '_count'] . '</div>'
-                    . '</div>';
+            $post[$type . '_count'] = (!empty($post[$type . '_count'])) ?: '';
+            if ($post[$type . '_count'] > 1000) {
+                $post[$type . '_count'] = number_format($post[$type . '_count']/1000, 1) . 'K';
             }
-            else {
-                $post[$type . '_count'] = '';
-            }
+            $post[$type . '_count'] = '<div class="tweetledummer-post__stat tweetledummer-post__' . $type . '">'
+                . '<img width=20" height="20" src="images/' . $type . '.svg">'
+                . '<div>' . $post[$type . '_count'] . '</div>'
+                . '</div>';
         }
         $images = '';
         if ($post['images']) {
@@ -347,38 +350,64 @@ class TweetledummerBluesky {
                 . '</a>'
                 . '</div>';
         }
+        $quoted = '';
+        if ($post['quoted']) {
+            $quoted = $this->showPost($post['quoted'], 'quoted');
+        }
+        $reply_to = '';
+        if ($post['reply_to']) {
+            $reply_to = $this->showPost($post['reply_to'], 'reply-to');
+        }
+        $reposted_by = '';
+        if ($post['repost']) {
+            $reposted_by = '<div class="tweetledummer-post__reposted-by"><img width=20" height="20" src="images/repost.svg"> '
+                . '<a href="' . $post['repost']['author_url'] . '">Reposted by ' . htmlentities($post['repost']['author_display_name']) . '</a>'
+                . '</div>';
 
-        if ($since = $this->timeSince($post['timestamp'], 2)) {
-            $since .= ' ago';
+//            'author_handle' => $item->reason->by->handle,
+//            'author_display_name' => $item->reason->by->displayName,
+//            'author_url' => $this->getAuthorUrl($item->reason->by),
+
         }
-        else {
-            $since = 'now';
-        }
+//        if ($since = $this->timeSince($post['timestamp'], 2)) {
+//            $since .= ' ago';
+//        }
+//        else {
+//            $since = 'now';
+//        }
+        $age = $this->timeSince($post['timestamp'], 1);
 
         return <<<EOT
-<div class=tweetledummer-post-wrapper {$class}">
+<div class="tweetledummer-post-wrapper {$class}">
+    {$reposted_by}
+    {$reply_to}
     <div class="tweetledummer-post">
-        <div class="tweetledummer-post__author-header">
-            <a class="tweetledummer-post__author-image" href="{$post['author_url']}"><img width="40" height="40" src="{$post['author_avatar']}"></a>
-            <div class="tweetledummer-post__author">
-                <div class="tweetledummer-post__author-name"><a href="{$post['author_url']}">{$post['author_display_name']}</a></div>
-                <div class="tweetledummer-post__author-handle"><a href="{$post['author_url']}">@{$post['author_handle']}</a></div>
-            </div>
-            <div class="tweetledummer-post__logo-link"><a href="{$post['post_url']}"><img width="40" height="32" src="images/bsky.svg"></a></div>
+        <div class="tweetledummer-post__left">
+            <a class="tweetledummer-post__author-image" href="{$post['author_url']}"><img src="{$post['author_avatar']}"></a>
+            <div></div>
         </div>
-        <div class="tweetledummer-post__body">
-            {$post['text']}
-            {$embed}
-            {$images}
-        </div>
-        <div class="tweetledummer-post__created">{$post['created']} ({$since})</div>
-        <div class="tweetledummer-post__footer">
-            <div class="tweetledummer-post__stats">
-                {$post['like_count']}
-                {$post['repost_count']}
-                {$post['reply_count']}
+        <div class="tweetledummer-post__main">
+            <div class="tweetledummer-post__header">
+                <div class="tweetledummer-post__meta">
+                    <a class="tweetledummer-post__author-image" href="{$post['author_url']}"><img src="{$post['author_avatar']}"></a>
+                    <span class="tweetledummer-post__author-name"><a href="{$post['author_url']}">{$post['author_display_name']}</a></span>
+                    <span class="tweetledummer-post__author-handle"><a href="{$post['author_url']}">@{$post['author_handle']}</a></span>
+                    <span class="tweetledummer-post__age" title="{$post['created']}"> - {$age}</span>
+                </div>
             </div>
-            <div class="tweetledummer-post__link">{$view_link}</div>
+            <div class="tweetledummer-post__body">
+                {$post['text']}
+                {$embed}
+                {$quoted}
+                {$images}
+            </div>
+            <div class="tweetledummer-post__footer">
+                <div class="tweetledummer-post__stats">
+                    {$post['like_count']}
+                    {$post['repost_count']}
+                    {$post['reply_count']}
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -428,7 +457,8 @@ EOT;
         $date->setTimestamp($timestamp);
         $date = $date->diff(new \DateTime());
         // build array
-        $since = array_combine(['year', 'month', 'day', 'hour', 'minute', 'second'], explode(',', $date->format('%y,%m,%d,%h,%i,%s')));
+//        $since = array_combine(['year', 'month', 'day', 'hour', 'minute', 'second'], explode(',', $date->format('%y,%m,%d,%h,%i,%s')));
+        $since = array_combine(['y', 'mo.', 'd', 'h', 'm', 's'], explode(',', $date->format('%y,%m,%d,%h,%i,%s')));
         // remove empty date values
         $since = array_filter($since);
         // output only the first x date values
@@ -442,9 +472,9 @@ EOT;
                 $string .= ($key != $last_key) ? ', ' : ' and ';
             }
             // set plural
-            $key .= $val > 1 ? 's' : '';
+//            $key .= $val > 1 ? 's' : '';
             // add date value
-            $string .= $val . ' ' . $key;
+            $string .= $val . $key;
         }
         return $string;
     }
