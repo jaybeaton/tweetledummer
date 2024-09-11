@@ -166,11 +166,13 @@ class TweetledummerController {
             $date->setTimezone($tz);
             $row['data']['created'] = $date->format(self::DATE_FORMAT_DISPLAY);
 
-            $link_url = NULL;
             if (!empty($row['data']['link_url_expanded'])) {
                 $link_url = $row['data']['link_url_expanded'];
             } elseif (!empty($row['data']['link_url'])) {
                 $link_url = $row['data']['link_url'];
+            }
+            else {
+                $link_url = $row['data']['post_url'];
             }
             $markup = $this->tweetledummer->showPost($row['data']);
 
