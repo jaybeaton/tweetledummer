@@ -311,6 +311,9 @@ class TweetledummerBluesky {
         foreach (['author_display_name', 'author_handle', 'text'] as $key) {
             $post[$key] = htmlentities($post[$key]);
         }
+        if (!$post['author_avatar']) {
+            $post['author_avatar'] = 'images/circle-user-regular.svg';
+        }
         $post['text'] = nl2br($post['text']);
         foreach (['like', 'repost', 'reply'] as $type) {
             $post[$type . '_count'] = (!empty($post[$type . '_count'])) ?: '';
