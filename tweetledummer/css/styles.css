@@ -450,6 +450,9 @@ body {
 .bulk-mark-read td.count {
   text-align: right;
 }
+table.bulk-mark-read {
+  padding-bottom: 100px;
+}
 .lists-wrapper h3 {
   margin-bottom: 0;
 }
