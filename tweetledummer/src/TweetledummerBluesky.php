@@ -205,6 +205,7 @@ class TweetledummerBluesky {
             'link_facet' => $post->record->facets[0]->features[0]->uri ?? NULL,
             'embed' => [],
             'images' => [],
+            'video' => [],
             'created' => $created,
             'timestamp' => $timestamp,
             'repost_count' => $post->repostCount ?? 0,
@@ -215,6 +216,7 @@ class TweetledummerBluesky {
             'quoted' => [],
             'reply_to' => [],
         ];
+        $embed_type = $post->embed->{'$type'} ?? NULL;
         if (!empty($post->record->embed->external->uri)) {
             $data['embed'] = [
                 'uri' => $post->record->embed->external->uri,
@@ -243,6 +245,12 @@ class TweetledummerBluesky {
                     'alt' => $image->alt ?? '',
                 ];
             }
+        }
+        if ($embed_type == 'app.bsky.embed.video#view') {
+            $data['video'] = [
+                'thumbnail' => $post->embed->thumbnail,
+                'playlist' => $post->embed->playlist,
+            ];
         }
         $reason_type = $item->reason->{'$type'} ?? NULL;
         if ($reason_type == 'app.bsky.feed.defs#reasonRepost') {
@@ -325,12 +333,21 @@ class TweetledummerBluesky {
                 . '<div>' . $post[$type . '_count'] . '</div>'
                 . '</div>';
         }
+        $is_video = '';
         $images = '';
+        if (!empty($post['video'])) {
+            $is_video = '<div class="tweetledummer-post__video"><img width=20" height="20" src="images/circle-play-regular.svg"><span>Video</span></div>';
+            $post['images'][] = [
+                'alt' => 'Video thumbnail',
+                'url' => $post['video']['thumbnail'],
+                'class' => 'video',
+            ];
+        }
         if ($post['images']) {
             $images_class = (count($post['images']) > 1) ? 'multiple' : 'single';
             $images = '<div class="tweetledummer-post__images tweetledummer-post__images--' . $images_class . '">';
             foreach ($post['images'] as $image) {
-                $images .= "\n" . '<a href="' . $image['url'] . '"><img alt="' . htmlentities($image['alt']) . '" src="' . $image['url'] . '"></a>' . "\n";
+                $images .= "\n" . '<a href="' . $image['url'] . '"><img class="' . ($image['class'] ?? '') . '" alt="' . htmlentities($image['alt']) . '" src="' . $image['url'] . '"></a>' . "\n";
             }
             $images .= '</div>';
         }
@@ -417,6 +434,7 @@ class TweetledummerBluesky {
             </div>
             <div class="tweetledummer-post__body">
                 {$post['text']}
+                {$is_video}
                 {$embed}
                 {$quoted}
                 {$images}
