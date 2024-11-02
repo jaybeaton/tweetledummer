@@ -240,7 +240,7 @@ let twtldListname= '';
     }
 
     $('.tweetledum-tweet').removeClass('active');
-    let activeElement = document.elementFromPoint(200, 75);
+    let activeElement = document.elementFromPoint(300, 75);
     if (twtldDebug) {
       console.log('getTopItem() activeElement is:');
       console.log(activeElement);
@@ -249,7 +249,7 @@ let twtldListname= '';
       if (twtldDebug) {
         console.log('getTopItem() activeElement is not one of our tweets.');
       }
-      activeElement = $(activeElement).parent('.tweetledum-tweet');
+      activeElement = $(activeElement).parents('.tweetledum-tweet').first();
       if (!$(activeElement).hasClass('tweetledum-tweet')) {
         if (twtldDebug) {
           console.log('getTopItem() activeElement does not have a parent that is one of our tweets.');
