@@ -496,6 +496,15 @@ table.bulk-mark-read {
 .list-fields {
   margin-top: 30px;
 }
+.list {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.list img {
+  display: block;
+  padding-top: 5px;
+}
 .messages {
   width: 400px;
   border: 1px solid #3c763d;

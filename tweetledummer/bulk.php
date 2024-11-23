@@ -99,9 +99,9 @@ $num_unread = $controller->getUnread();
       <?php if ($lists) { ?>
         <ul>
           <?php foreach ($lists as $list) { ?>
-            <li>
+            <li class="list">
               <a href="bulk.php?list=<?php print urlencode($list); ?>"><?php print htmlentities($list); ?></a>
-              [<a href="./#list:<?php print htmlentities($list) ?>">read</a>]
+              <a class="read-list" href="./#list:<?php print htmlentities($list) ?>"><img src="images/eye.svg" width="20" height="20" alt="Read" title="Read"></a>
             </li>
           <?php } ?>
         </ul>
