@@ -293,14 +293,7 @@ const SCROLL_OFFSET = 50;
         if (twtldDebug) {
           console.log('keydown("n"): Scrolling to active tweet (' + $('.active').first().attr('data-id') + ').');
         }
-        // $('.active')[0].scrollIntoView({
-        //   behavior: 'smooth',
-        //   block: 'start'
-        // });
-        $('html, body').animate({
-          scrollTop: $($('.active')[0]).offset().top - SCROLL_OFFSET
-        }, 'slow');
-
+        scrollToElement($('.active')[0]);
       }
       else {
         if (twtldDebug) {
@@ -321,14 +314,7 @@ const SCROLL_OFFSET = 50;
         return;
       }
       activeItem.removeClass('active');
-      // $(prev)[0].scrollIntoView({
-      //   behavior: 'smooth',
-      //   block: 'start'
-      // });
-      $('html, body').animate({
-        scrollTop: $($(prev)[0]).offset().top - SCROLL_OFFSET
-      }, 'slow');
-
+      scrollToElement($(prev)[0]);
     }
     else if (keyCode === 74) {
       // Pressing "j" will scroll to next item.
@@ -340,13 +326,7 @@ const SCROLL_OFFSET = 50;
         return;
       }
       activeItem.removeClass('active');
-      // $(next)[0].scrollIntoView({
-      //   behavior: 'smooth',
-      //   block: 'start'
-      // });
-      $('html, body').animate({
-        scrollTop: $($(next)[0]).offset().top - SCROLL_OFFSET
-      }, 'slow');
+      scrollToElement($(next)[0]);
     }
     else if (keyCode === 86) {
       // Pressing "v" will open url.
@@ -369,6 +349,12 @@ const SCROLL_OFFSET = 50;
       activeItem.toggleClass('show-extra');
     }
   };
+
+  let scrollToElement = function (element) {
+    $('html, body').animate({
+      scrollTop: $(element).offset().top - SCROLL_OFFSET
+    });
+  }
 
   $(document).keydown(function (event) {
     processKeyPress(event);
