@@ -72,7 +72,7 @@ body.read #unread-count {
 .main {
   float: left;
   width: 710px;
-  margin-top: 20px;
+  margin-top: 35px;
 }
 body.bulk .main {
   margin-top: 0;

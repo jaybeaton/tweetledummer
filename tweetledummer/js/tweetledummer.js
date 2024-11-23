@@ -1,7 +1,7 @@
 let twtldDebug = false;
 let twtldUsername = '';
 let twtldListname= '';
-const SCROLL_OFFSET = 50;
+const SCROLL_OFFSET = 65;
 
 (function ($) {
 
