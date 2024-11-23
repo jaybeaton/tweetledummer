@@ -72,7 +72,7 @@ $num_unread = $controller->getUnread();
   <title>Tweetledum Bulk Mark-Read</title>
   <link type="text/css" rel="stylesheet" href="css/styles.css" media="all" />
 </head>
-<body>
+<body class="bulk">
 
 <div class="info-column">
   <?php
@@ -81,7 +81,7 @@ $num_unread = $controller->getUnread();
   }
   ?>
   <div>
-      <a href="/">Read</a>
+      <a href="/"><img src="images/readme.svg" width="50" height="50" alt="Read" title="Read"></a>
   </div>
   <div>
     <div class="count-label">Unread</div> <span id="unread-count"><?php print $num_unread; ?></span>

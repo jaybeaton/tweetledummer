@@ -1,6 +1,7 @@
 let twtldDebug = false;
 let twtldUsername = '';
 let twtldListname= '';
+const SCROLL_OFFSET = 50;
 
 (function ($) {
 
@@ -77,6 +78,7 @@ let twtldListname= '';
     if (twtldUsername) {
       url += '&author=' + encodeURI(twtldUsername);
       $('#current-view').text('@' + twtldUsername);
+      // $('#current-view').text('@' + twtldUsername.replace('.bsky.social', ''));
     }
     else if (twtldListname) {
       url += '&list=' + encodeURI(twtldListname);
@@ -240,7 +242,7 @@ let twtldListname= '';
     }
 
     $('.tweetledum-tweet').removeClass('active');
-    let activeElement = document.elementFromPoint(300, 75);
+    let activeElement = document.elementFromPoint(300, 100);
     if (twtldDebug) {
       console.log('getTopItem() activeElement is:');
       console.log(activeElement);
@@ -291,10 +293,14 @@ let twtldListname= '';
         if (twtldDebug) {
           console.log('keydown("n"): Scrolling to active tweet (' + $('.active').first().attr('data-id') + ').');
         }
-        $('.active')[0].scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
-        });
+        // $('.active')[0].scrollIntoView({
+        //   behavior: 'smooth',
+        //   block: 'start'
+        // });
+        $('html, body').animate({
+          scrollTop: $($('.active')[0]).offset().top - SCROLL_OFFSET
+        }, 'slow');
+
       }
       else {
         if (twtldDebug) {
@@ -315,10 +321,14 @@ let twtldListname= '';
         return;
       }
       activeItem.removeClass('active');
-      $(prev)[0].scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
+      // $(prev)[0].scrollIntoView({
+      //   behavior: 'smooth',
+      //   block: 'start'
+      // });
+      $('html, body').animate({
+        scrollTop: $($(prev)[0]).offset().top - SCROLL_OFFSET
+      }, 'slow');
+
     }
     else if (keyCode === 74) {
       // Pressing "j" will scroll to next item.
@@ -330,10 +340,13 @@ let twtldListname= '';
         return;
       }
       activeItem.removeClass('active');
-      $(next)[0].scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
+      // $(next)[0].scrollIntoView({
+      //   behavior: 'smooth',
+      //   block: 'start'
+      // });
+      $('html, body').animate({
+        scrollTop: $($(next)[0]).offset().top - SCROLL_OFFSET
+      }, 'slow');
     }
     else if (keyCode === 86) {
       // Pressing "v" will open url.

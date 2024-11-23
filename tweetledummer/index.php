@@ -15,7 +15,7 @@ $profile_img = NULL;
 if (!empty($profile->avatar)) {
     $user_url = 'https://bsky.app/profile/' . $profile->handle;
     $profile_img = '<div class="profile-image"><a target="_blank" href="' . $user_url . '">'
-        . '<img width="50" height="50" src="' . $profile->avatar . '" />'
+        . '<img width="30" height="30" src="' . $profile->avatar . '" />'
         . '</a></div>';
 }
 ?>
@@ -28,22 +28,22 @@ if (!empty($profile->avatar)) {
     <title>Tweetledum Timeline</title>
     <link type="text/css" rel="stylesheet" href="css/styles.css" media="all" />
 </head>
-<body>
+<body class="read">
 
-<div class="info-column">
+<div class="info-bar">
 <?php
   if (!empty($profile_img)) {
     print $profile_img;
   }
 ?>
     <div>
-        <a href="/bulk.php">Bulk</a>
-    </div>
-    <div>
-        <span id="current-view"></span>
+        <a href="/bulk.php"><img src="images/list.svg" width="30" height="30" alt="Bulk" title="Bulk"></a>
     </div>
     <div>
         <span id="unread-count">0</span>
+    </div>
+    <div>
+        <span id="current-view"></span>
     </div>
     <div class="tweetledum-controls" style="display: none;">
         <button class="tweetledum-controls-up" data-keycode="75">⬆️</button>

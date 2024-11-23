@@ -1,5 +1,5 @@
 body {
-  margin: 10px 80px;
+  margin: 10px 25px;
   background-color: #ddd;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 1rem;
@@ -8,11 +8,33 @@ body {
   color: #212529;
   text-align: left;
 }
+
+.info-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #fff3cd;
+  border-bottom: 2px solid;
+  width: 100%;
+  height: 30px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  /*overflow: auto;*/
+}
+.info-bar div {
+  display: block;
+  width: auto;
+  /*padding-bottom: 20px;*/
+  /*position: relative;*/
+}
+
 .info-column {
   position: fixed;
   top: 0;
   left: 0;
-  width: 260px;
+  width: 160px;
   padding: 20px;
   height: 100%;
   overflow: auto;
@@ -20,14 +42,9 @@ body {
 .info-column div {
   float: left;
   clear: both;
-  width: 190px;
+  width: 90px;
   padding-bottom: 20px;
   position: relative;
-}
-.main {
-  float: left;
-  width: 710px;
-  margin-left: 170px;
 }
 #unread-count {
   font-size: 1.2em;
@@ -39,12 +56,27 @@ body {
 #unread-count.loading {
   background-color: #fff3cd;
 }
+body.read #unread-count {
+  background-color: #ddd;
+  border: 1px solid;
+}
+
 #current-view {
   font-size: 1em;
   color: #666;
-  background-color: #bbb;
+  background-color: #ddd;
+  border: 1px solid;
   border-radius: 5px;
   padding: 5px;
+}
+.main {
+  float: left;
+  width: 710px;
+  margin-top: 20px;
+}
+body.bulk .main {
+  margin-top: 0;
+  margin-left: 70px;
 }
 .tweetledum-feed {
   margin: 20px 0;
@@ -159,10 +191,6 @@ body {
 {
   display: none !important;
 }
-
-
-
-
 
 .tweetledummer-post-wrapper {
   max-width: 650px;
@@ -445,7 +473,7 @@ body {
   border-radius: 0.25rem;
 }
 .tweetledum-bulk {
-  margin: 20px 0 0 60px;
+  margin: 0 0 0 60px;
   width: 505px;
 }
 .bulk-mark-read td.checkbox {
