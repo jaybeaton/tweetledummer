@@ -14,11 +14,11 @@ body {
   z-index: 1000;
   top: 0;
   left: 0;
-  background-color: #fff3cd;
+  background-color: #cedbf4;
   border-bottom: 2px solid;
   width: 100%;
   height: 30px;
-  padding: 10px;
+  padding: 5px;
 }
 .info-bar__inner {
   max-width: 690px;
@@ -36,8 +36,6 @@ body {
 .info-bar__items div {
   display: block;
   width: auto;
-  /*padding-bottom: 20px;*/
-  /*position: relative;*/
 }
 
 .info-column {
@@ -57,15 +55,16 @@ body {
   position: relative;
 }
 #unread-count {
-  font-weight: bold;
-  /*color: #666;*/
   background-color: #bbb;
+  color: #666;
   border-radius: 5px;
   padding: 5px;
 }
 body.read #unread-count {
   background-color: #ddd;
+  font-weight: bold;
   border: 1px solid;
+  padding: 2px 5px;
 }
 body.read #unread-count.loading {
   background-color: #212529;
@@ -533,7 +532,6 @@ div.count-label {
   font-weight: bold;
 }
 .count-value {
-  font-size: 1.2em;
   color: #666;
   background-color: #bbb;
   border-radius: 5px;
@@ -561,7 +559,7 @@ div.count-label {
       position: fixed;
       left: 0;
       bottom: 0;
-      background-color: #fff3cd;
+      background-color: #cedbf4;
       border-top: 2px solid;
       width: 100%;
       padding-left: 30px;
