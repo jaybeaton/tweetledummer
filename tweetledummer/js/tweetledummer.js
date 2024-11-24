@@ -352,8 +352,8 @@ const SCROLL_OFFSET = 65;
 
   let scrollToElement = function (element) {
     $('html, body').animate({
-      scrollTop: $(element).offset().top - SCROLL_OFFSET
-    });
+      scrollTop: $(element).offset().top - SCROLL_OFFSET,
+    }, 'fast');
   }
 
   $(document).keydown(function (event) {
@@ -362,10 +362,12 @@ const SCROLL_OFFSET = 65;
 
   $(window).scroll(function () {
     if (!checkingLoadMore) {
-      checkingLoadMore = true;
-      checkLoadMore();
       setTimeout(function () {
-        checkingLoadMore = false;
+        checkingLoadMore = true;
+        checkLoadMore();
+        setTimeout(function () {
+          checkingLoadMore = false;
+        }, 100);
       }, 100);
     }
   });
