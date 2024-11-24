@@ -353,7 +353,7 @@ const SCROLL_OFFSET = 65;
   let scrollToElement = function (element) {
     $('html, body').animate({
       scrollTop: $(element).offset().top - SCROLL_OFFSET,
-    }, 'fast');
+    }, '400');
   }
 
   $(document).keydown(function (event) {
