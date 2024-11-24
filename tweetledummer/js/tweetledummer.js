@@ -392,4 +392,10 @@ const SCROLL_OFFSET = 65;
     $('.tweetledum-controls').show();
   }
 
+  document.addEventListener("visibilitychange", function() {
+    if (!document.hidden) {
+      processLoadMoreButton();
+    }
+  });
+
 })(jQuery);
