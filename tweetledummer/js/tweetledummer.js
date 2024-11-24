@@ -202,6 +202,10 @@ const SCROLL_OFFSET = 65;
     if (twtldDebug) {
       console.log('markActive() Mark previous tweet read, id (' + id + ').');
     }
+    setUnreadCount(id);
+  };
+
+  let setUnreadCount = function (id) {
     let url = 'mark-read.php?id=' + id;
     if (twtldUsername) {
       url += '&author=' + encodeURI(twtldUsername);
@@ -395,6 +399,7 @@ const SCROLL_OFFSET = 65;
   document.addEventListener("visibilitychange", function() {
     if (!document.hidden) {
       processLoadMoreButton();
+      setUnreadCount(0);
     }
   });
 
