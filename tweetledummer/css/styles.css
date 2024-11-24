@@ -58,21 +58,22 @@ body {
 }
 #unread-count {
   font-weight: bold;
-  color: #666;
+  /*color: #666;*/
   background-color: #bbb;
   border-radius: 5px;
   padding: 5px;
-}
-#unread-count.loading {
-  background-color: #fff3cd;
 }
 body.read #unread-count {
   background-color: #ddd;
   border: 1px solid;
 }
+body.read #unread-count.loading {
+  background-color: #212529;
+  color: #ddd;
+}
 
 #current-view {
-  color: #666;
+  /*color: #666;*/
   background-color: #ddd;
   border: 1px solid;
   border-radius: 5px;
