@@ -76,7 +76,7 @@ body.read #unread-count.loading {
   background-color: #ddd;
   border: 1px solid;
   border-radius: 5px;
-  padding: 5px;
+  padding: 2px 5px;
 }
 .main {
   float: left;
