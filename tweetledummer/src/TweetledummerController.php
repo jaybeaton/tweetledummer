@@ -161,7 +161,10 @@ class TweetledummerController {
 
         while ($row = $result->fetch_assoc()) {
 
-            $row['data'] = unserialize($row['data']);
+            $row['data'] = @unserialize($row['data']);
+            if (!is_array($row['data'])) {
+                continue;
+            }
             $date = new \DateTime('@' . $row['timestamp'], $utc);
             $date->setTimezone($tz);
             $row['data']['created'] = $date->format(self::DATE_FORMAT_DISPLAY);
