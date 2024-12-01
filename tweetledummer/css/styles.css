@@ -42,7 +42,7 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  width: 160px;
+  width: 320px;
   padding: 20px;
   height: 100%;
   overflow: auto;
@@ -50,7 +50,7 @@ body {
 .info-column div {
   float: left;
   clear: both;
-  width: 90px;
+  width: 2000px;
   padding-bottom: 20px;
   position: relative;
 }
@@ -85,7 +85,7 @@ body.read #unread-count.loading {
 }
 body.bulk .main {
   margin-top: 0;
-  margin-left: 70px;
+  margin-left: 160px;
 }
 .tweetledum-feed {
   margin: 20px 0;
