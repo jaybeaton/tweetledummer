@@ -17,7 +17,7 @@ if (!empty($profile->avatar)) {
     $user_url = 'https://bsky.app/profile/' . $profile->handle;
     $profile_img = '<div class="profile-image"><a target="_blank" href="' . $user_url . '">'
         . '<img width="50" height="50" src="' . $profile->avatar . '" />'
-        . '</a></div>';
+        . "</a></div>\n";
 }
 
 $current_url = $_SERVER['SCRIPT_NAME'];
