@@ -143,7 +143,17 @@ const SCROLL_OFFSET = 55;
       $('.tweetledum-tweet.tweetledum-new').click(function () {
         $('.active').removeClass('active');
         markActive($(this));
-      }).removeClass('tweetledum-new');
+      }).each( function () {
+        // Process video.
+        let video = $(this).find('video.video-new')[0];
+        if (video) {
+          var hls = new Hls();
+          hls.loadSource(video.src);
+          hls.attachMedia(video);
+          $(video).removeClass('video-new')
+        }
+      })
+      .removeClass('tweetledum-new');
 
       if (totalTweets > numToKeep) {
         let n = 0;

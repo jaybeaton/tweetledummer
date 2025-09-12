@@ -63,6 +63,7 @@ if (!empty($profile->avatar)) {
 </div>
 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@canary""></script>
 <script src="js/jquery.visible.min.js"></script>
 <script src="js/tweetledummer.js"></script>
 <script async src="https://embed.bsky.app/static/embed.js" charset="utf-8"></script>

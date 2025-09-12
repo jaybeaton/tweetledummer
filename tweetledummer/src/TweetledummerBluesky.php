@@ -336,12 +336,13 @@ class TweetledummerBluesky {
         $is_video = '';
         $images = '';
         if (!empty($post['video'])) {
-            $is_video = '<div class="tweetledummer-post__video"><img width=20" height="20" src="images/circle-play-regular.svg"><span>Video</span></div>';
-            $post['images'][] = [
-                'alt' => 'Video thumbnail',
-                'url' => $post['video']['thumbnail'],
-                'class' => 'video',
-            ];
+            //$is_video = '<div class="tweetledummer-post__video"><img width=20" height="20" src="images/circle-play-regular.svg"><span>Video</span></div>';
+            $is_video = '<video class="video video-new" width="480px" height="600px" controls type="application/x-mpegURL" poster="' . $post['video']['thumbnail'] . '" src="' . $post['video']['playlist'] . '"></video>';
+//            $post['images'][] = [
+//                'alt' => 'Video thumbnail',
+//                'url' => $post['video']['thumbnail'],
+//                'class' => 'video',
+//            ];
         }
         if ($post['images']) {
             $images_class = (count($post['images']) > 1) ? 'multiple' : 'single';
