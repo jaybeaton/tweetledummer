@@ -12,6 +12,8 @@ class TweetledummerBluesky {
 
     const LINK_MAX_LENGTH = 60;
 
+    const POSTER_IMAGE_MAX_WIDTH = 500;
+
     const ELLIPSIS = '…';
 
     private $settings = [];
@@ -248,8 +250,10 @@ class TweetledummerBluesky {
         }
         if ($embed_type == 'app.bsky.embed.video#view') {
             $data['video'] = [
-                'thumbnail' => $post->embed->thumbnail,
                 'playlist' => $post->embed->playlist,
+                'thumbnail' => $post->embed->thumbnail,
+                'height' => $post->embed->aspectRatio->height ?? 0,
+                'width' => $post->embed->aspectRatio->width ?? 0,
             ];
         }
         $reason_type = $item->reason->{'$type'} ?? NULL;
@@ -336,8 +340,14 @@ class TweetledummerBluesky {
         $is_video = '';
         $images = '';
         if (!empty($post['video'])) {
+            $height = $post['video']['height'] ?? 600;
+            $width = $post['video']['width'] ?? 350;
+            if ($width > self::POSTER_IMAGE_MAX_WIDTH) {
+              $height = (self::POSTER_IMAGE_MAX_WIDTH / $width) * $height;
+              $width = self::POSTER_IMAGE_MAX_WIDTH;
+            }
             //$is_video = '<div class="tweetledummer-post__video"><img width=20" height="20" src="images/circle-play-regular.svg"><span>Video</span></div>';
-            $is_video = '<video class="video video-new" width="480px" height="600px" controls type="application/x-mpegURL" poster="' . $post['video']['thumbnail'] . '" src="' . $post['video']['playlist'] . '"></video>';
+            $is_video = '<video class="video video-new" width="' . $width . 'px" height="' . $height . 'px" controls type="application/x-mpegURL" poster="' . $post['video']['thumbnail'] . '" src="' . $post['video']['playlist'] . '"></video>';
 //            $post['images'][] = [
 //                'alt' => 'Video thumbnail',
 //                'url' => $post['video']['thumbnail'],
