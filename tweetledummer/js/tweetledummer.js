@@ -147,9 +147,12 @@ const SCROLL_OFFSET = 55;
         // Process video.
         let video = $(this).find('video.video-new')[0];
         if (video) {
-          var hls = new Hls();
-          hls.loadSource(video.src);
-          hls.attachMedia(video);
+          $(video).click(function () {
+            let hls = new Hls();
+            hls.loadSource(video.src);
+            hls.attachMedia(video);
+            $(video).off('click');
+          });
           $(video).removeClass('video-new')
         }
       })
