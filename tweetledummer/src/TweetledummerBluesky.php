@@ -12,7 +12,7 @@ class TweetledummerBluesky {
 
     const LINK_MAX_LENGTH = 60;
 
-    const POSTER_IMAGE_MAX_WIDTH = 500;
+    const POSTER_IMAGE_MAX_WIDTH = 548;
 
     const ELLIPSIS = '…';
 
@@ -342,7 +342,7 @@ class TweetledummerBluesky {
         if (!empty($post['video'])) {
             $height = $post['video']['height'] ?? 600;
             $width = $post['video']['width'] ?? 350;
-            if ($width > self::POSTER_IMAGE_MAX_WIDTH) {
+            if ($width > self::POSTER_IMAGE_MAX_WIDTH || $width > $height) {
               $height = (self::POSTER_IMAGE_MAX_WIDTH / $width) * $height;
               $width = self::POSTER_IMAGE_MAX_WIDTH;
             }
