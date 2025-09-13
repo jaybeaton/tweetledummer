@@ -145,7 +145,7 @@ $num_unread = $controller->getUnread();
         </div>
         <div class="list-fields">
           <div>
-            <input class="bulk-input bulk-input--list" type="textfield" name="list-name" maxlength="255" value="<?php print htmlentities($list_name); ?>">
+            <input class="bulk-input bulk-input--list" type="textfield" name="list-name" maxlength="255" value="<?php print htmlentities($list_name ?? ''); ?>">
           </div>
           <div>
             <input class="bulk-save bulk-save--list" type="submit" name="save-list" value="Save list" />
