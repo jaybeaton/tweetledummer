@@ -279,7 +279,7 @@ class TweetledummerBluesky {
     }
 
     public function getUniqueID($created_at, $post_id) {
-        $timestamp = preg_replace('/[^0-9]/', '', $created_at);
+        $timestamp = preg_replace('/[^0-9]/', '', $created_at) ?? '';
         $timestamp = str_pad($timestamp, 20, '0', STR_PAD_RIGHT);
         $post_id = str_pad($post_id, 20, '0', STR_PAD_LEFT);
         return $timestamp . '-' . $post_id;
@@ -347,7 +347,12 @@ class TweetledummerBluesky {
               $width = self::POSTER_IMAGE_MAX_WIDTH;
             }
             //$is_video = '<div class="tweetledummer-post__video"><img width=20" height="20" src="images/circle-play-regular.svg"><span>Video</span></div>';
-            $is_video = '<video class="video video-new" width="' . $width . 'px" height="' . $height . 'px" controls autoplay type="application/x-mpegURL" poster="' . $post['video']['thumbnail'] . '" src="' . $post['video']['playlist'] . '"></video>';
+            $is_video =  '<div class="tweetledummer-post__video">'
+              . '<div class="tweetledummer-post__video__wrapper">'
+              . '<video class="video video-new" width="' . $width . 'px" height="' . $height . 'px" controls autoplay type="application/x-mpegURL" poster="' . $post['video']['thumbnail'] . '" src="' . $post['video']['playlist'] . '"></video>'
+              . '<img class="play-button" width="80" height="80" src="/images/play.svg">'
+              . '</div>'
+              . '</div>';
 //            $post['images'][] = [
 //                'alt' => 'Video thumbnail',
 //                'url' => $post['video']['thumbnail'],

@@ -325,6 +325,25 @@ body.bulk .main {
   margin-top: 10px;
   margin-bottom: -20px;
 }
+
+.tweetledummer-post__video__wrapper {
+  position: relative;
+}
+
+.tweetledummer-post video {
+  border-radius: 12px;
+}
+img.play-button {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  left: 50%;
+  top: 50%;
+  margin-left: -40px;
+  margin-top: -40px;
+}
+
+
 .tweetledummer-post__images {
   border-radius: 12px;
   margin-top: 20px;

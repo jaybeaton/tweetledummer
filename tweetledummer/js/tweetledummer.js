@@ -147,11 +147,12 @@ const SCROLL_OFFSET = 55;
         // Process videos.
         $(this).find('video.video-new').each(function () {
           let video = this;
-          $(video).click(function () {
+          $(video).parent('.tweetledummer-post__video__wrapper').click( function () {
             let hls = new Hls();
             hls.loadSource(video.src);
             hls.attachMedia(video);
             $(video).off('click');
+            $(video).siblings('img').remove();
           });
           $(video).removeClass('video-new');
         });
