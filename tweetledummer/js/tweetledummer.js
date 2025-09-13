@@ -144,17 +144,17 @@ const SCROLL_OFFSET = 55;
         $('.active').removeClass('active');
         markActive($(this));
       }).each( function () {
-        // Process video.
-        let video = $(this).find('video.video-new')[0];
-        if (video) {
+        // Process videos.
+        $(this).find('video.video-new').each(function () {
+          let video = this;
           $(video).click(function () {
             let hls = new Hls();
             hls.loadSource(video.src);
             hls.attachMedia(video);
             $(video).off('click');
           });
-          $(video).removeClass('video-new')
-        }
+          $(video).removeClass('video-new');
+        });
       })
       .removeClass('tweetledum-new');
 
