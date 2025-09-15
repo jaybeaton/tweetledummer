@@ -9,7 +9,8 @@ CREATE TABLE `tweetledummer_posts` (
   PRIMARY KEY (`id`),
   KEY `read` (`read`),
   KEY `user` (`user`),
-  KEY `author` (`author`)
+  KEY `author` (`author`),
+  KEY `timestamp` (`timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 CREATE TABLE `tweetledummer_lists` (
