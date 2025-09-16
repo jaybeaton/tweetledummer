@@ -120,6 +120,66 @@ class TweetledummerBluesky {
         return $this->blueskyApi->request('GET', 'app.bsky.actor.getProfile', $args);
     }
 
+    public function getPosts($args = []) {
+
+      if (!$this->blueskyIsAuthed) {
+        $this->getBlueskyAuth();
+      }
+
+      $args += [
+        'collection' => 'app.bsky.feed.getPosts',
+        'uris' => [],
+      ];
+
+      $result = $this->blueskyApi->request('GET', 'app.bsky.feed.getPosts', $args);
+
+      if (!isset($result->posts)) {
+        return [];
+      }
+
+      $posts = [];
+      foreach ($result->posts as $item) {
+        $data = $this->getPostData($item);
+        $data['full'] = $item;
+        $posts[] = $data;
+      } // Lop thru posts.
+
+      return $posts;
+
+    }
+
+    public function getThread($args = []) {
+
+      if (!$this->blueskyIsAuthed) {
+        $this->getBlueskyAuth();
+      }
+
+      $args += [
+        'collection' => 'app.bsky.feed.getPostThread',
+        'uri' => '',
+      ];
+
+      $result = $this->blueskyApi->request('GET', 'app.bsky.feed.getPostThread', $args);
+
+      if (isset($result->thread)) {
+        $items = [$result->thread->parent ?? NULL, $result->thread->post ?? NULL] + $result->thread->replies ?? NULL;
+        $items = array_filter($items);
+      }
+      else {
+        return [];
+      }
+
+      $posts = [];
+      foreach ($items as $item) {
+        $data = $this->getPostData($item);
+        $data['full'] = $item;
+        $posts[] = $data;
+      } // Lop thru posts.
+
+      return $posts;
+
+    }
+
     public function getTimeline($args = [], $since = FALSE) {
 
         static $posts = [];
@@ -218,17 +278,20 @@ class TweetledummerBluesky {
             'quoted' => [],
             'reply_to' => [],
         ];
-        $embed_type = $post->embed->{'$type'} ?? NULL;
-        if (!empty($post->record->embed->external->uri)) {
+        $embed = $post->embed ?? $post->embeds[0] ?? NULL;
+        $embed_type = $post->embed->{'$type'} ?? $post->embeds[0]->{'$type'} ?? NULL;
+//        \Kint::dump('getPostData', $post);
+        $media = $post->record->embed->external ?? $post->record->embed->media->external ?? NULL;
+        if (!empty($media->uri)) {
             $data['embed'] = [
-                'uri' => $post->record->embed->external->uri,
-                'title' => $post->record->embed->external->title,
-                'description' => $post->record->embed->external->description,
+                'uri' => $media->uri,
+                'title' => $media->title,
+                'description' => $media->description,
                 'thumb' => NULL,
             ];
-            if (!empty($post->record->embed->external->thumb->ref->{'$link'})) {
-                $mime_type = explode('/', $post->record->embed->external->thumb->mimeType)[1] ?? '';
-                $data['embed']['thumb'] = 'https://cdn.bsky.app/img/feed_thumbnail/plain/' . $data['author_did'] . '/' . $post->record->embed->external->thumb->ref->{'$link'} . '@' . $mime_type;
+            if (!empty($media->thumb->ref->{'$link'})) {
+                $mime_type = explode('/', $media->thumb->mimeType)[1] ?? '';
+                $data['embed']['thumb'] = 'https://cdn.bsky.app/img/feed_thumbnail/plain/' . $data['author_did'] . '/' . $media->thumb->ref->{'$link'} . '@' . $mime_type;
             }
         }
         $images = $post->record->embed->images ?? $post->record->embed->media->images ?? $post->embeds[0]->images ?? NULL;
@@ -250,10 +313,10 @@ class TweetledummerBluesky {
         }
         if ($embed_type == 'app.bsky.embed.video#view') {
             $data['video'] = [
-                'playlist' => $post->embed->playlist,
-                'thumbnail' => $post->embed->thumbnail,
-                'height' => $post->embed->aspectRatio->height ?? 0,
-                'width' => $post->embed->aspectRatio->width ?? 0,
+                'playlist' => $embed->playlist,
+                'thumbnail' => $embed->thumbnail,
+                'height' => $embed->aspectRatio->height ?? 0,
+                'width' => $embed->aspectRatio->width ?? 0,
             ];
         }
         $reason_type = $item->reason->{'$type'} ?? NULL;
@@ -266,10 +329,15 @@ class TweetledummerBluesky {
             $created_at = $item->reason->indexedAt;
         }
         if (!$is_reply) {
-            if (!empty($post->embed->record->cid)) {
-                $data['quoted_record'] = $post->embed->record;
+            if (!empty($embed->record->cid)) {
+                $data['quoted_record'] = $embed->record;
                 //$post->embed->record->value->{'$type'} = 'app.bsky.feed.post';
-                $data['quoted'] = $this->getPostData($post->embed->record, TRUE);
+                $data['quoted'] = $this->getPostData($embed->record, TRUE);
+            }
+            elseif (!empty($embed->record->record->cid)) {
+                $data['quoted_record'] = $embed->record->record;
+                //$embed->record->value->{'$type'} = 'app.bsky.feed.post';
+                $data['quoted'] = $this->getPostData($embed->record->record, TRUE);
             } elseif (!empty($item->reply->parent)) {
                 $data['reply_to'] = $this->getPostData($item->reply->parent, TRUE);
             }
@@ -279,7 +347,7 @@ class TweetledummerBluesky {
     }
 
     public function getUniqueID($created_at, $post_id) {
-        $timestamp = preg_replace('/[^0-9]/', '', $created_at) ?? '';
+        $timestamp = preg_replace('/[^0-9]/', '', $created_at ?? '');
         $timestamp = str_pad($timestamp, 20, '0', STR_PAD_RIGHT);
         $post_id = str_pad($post_id, 20, '0', STR_PAD_LEFT);
         return $timestamp . '-' . $post_id;
@@ -321,7 +389,7 @@ class TweetledummerBluesky {
 
     public function showPost($post, $class = '', $author = NULL, $body = NUll, $stats = NULL) {
         foreach (['author_display_name', 'author_handle', 'text'] as $key) {
-            $post[$key] = htmlentities($post[$key]);
+            $post[$key] = htmlentities($post[$key] ?? '');
         }
         if (!$post['author_avatar']) {
             $post['author_avatar'] = 'images/circle-user-regular.svg';
@@ -340,11 +408,12 @@ class TweetledummerBluesky {
         $is_video = '';
         $images = '';
         if (!empty($post['video'])) {
+            $max_width = ($class) ? self::POSTER_IMAGE_MAX_WIDTH - 48 : self::POSTER_IMAGE_MAX_WIDTH;
             $height = $post['video']['height'] ?? 600;
             $width = $post['video']['width'] ?? 350;
-            if ($width > self::POSTER_IMAGE_MAX_WIDTH || $width > $height) {
-              $height = (self::POSTER_IMAGE_MAX_WIDTH / $width) * $height;
-              $width = self::POSTER_IMAGE_MAX_WIDTH;
+            if ($width > $max_width || $width > $height) {
+              $height = ($max_width / $width) * $height;
+              $width = $max_width;
             }
             //$is_video = '<div class="tweetledummer-post__video"><img width=20" height="20" src="images/circle-play-regular.svg"><span>Video</span></div>';
             $is_video =  '<div class="tweetledummer-post__video">'
