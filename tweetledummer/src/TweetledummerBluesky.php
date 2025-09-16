@@ -280,8 +280,8 @@ class TweetledummerBluesky {
         ];
         $embed = $post->embed ?? $post->embeds[0] ?? NULL;
         $embed_type = $post->embed->{'$type'} ?? $post->embeds[0]->{'$type'} ?? NULL;
-//        \Kint::dump('getPostData', $post);
-        $media = $post->record->embed->external ?? $post->record->embed->media->external ?? NULL;
+//        \Kint::dump('getPostData', $post, $is_reply);
+        $media = $post->record->embed->external ?? $post->record->embed->media->external ?? $post->embeds[0]->external ?? NULL;
         if (!empty($media->uri)) {
             $data['embed'] = [
                 'uri' => $media->uri,
@@ -292,6 +292,9 @@ class TweetledummerBluesky {
             if (!empty($media->thumb->ref->{'$link'})) {
                 $mime_type = explode('/', $media->thumb->mimeType)[1] ?? '';
                 $data['embed']['thumb'] = 'https://cdn.bsky.app/img/feed_thumbnail/plain/' . $data['author_did'] . '/' . $media->thumb->ref->{'$link'} . '@' . $mime_type;
+            }
+            elseif (!empty($media->thumb)) {
+              $data['embed']['thumb'] = $media->thumb;
             }
         }
         $images = $post->record->embed->images ?? $post->record->embed->media->images ?? $post->embeds[0]->images ?? NULL;
