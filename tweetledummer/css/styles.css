@@ -207,6 +207,13 @@ body.bulk .main {
   border: 3px solid transparent;
   border-radius: 12px;
 }
+.tweetledum-tweet .tweetledummer-post-wrapper {
+  background-color: #fff;
+  transition: background-color .5s ease-in-out;
+}
+.tweetledum-tweet.selecting-url .tweetledummer-post-wrapper {
+  background-color: #cedbf4;
+}
 .tweetledum-tweet.active > .tweetledummer-post-wrapper,
 .tweetledum-tweet:hover > .tweetledummer-post-wrapper {
   border: 3px solid #990000;
@@ -584,4 +591,3 @@ div.count-label {
       padding-left: 30px;
   }
 }
-
