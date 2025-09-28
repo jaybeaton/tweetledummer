@@ -297,7 +297,7 @@ class TweetledummerBluesky {
               $data['embed']['thumb'] = $media->thumb;
             }
         }
-        $images = $post->record->embed->images ?? $post->record->embed->media->images ?? $post->embeds[0]->images ?? NULL;
+        $images = $post->record->embed->images ?? $post->record->embed->media->images ?? $post->embeds[0]->images ?? $post->embeds[0]->media->images ?? NULL;
         if ($images) {
 //            \Kint::dump($post->record->embed->images);
             foreach ($images as $image) {
