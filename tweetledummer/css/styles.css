@@ -213,6 +213,7 @@ body.bulk .main {
 }
 .tweetledum-tweet.selecting-url .tweetledummer-post-wrapper {
   background-color: #cedbf4;
+  transition: none;
 }
 .tweetledum-tweet.active > .tweetledummer-post-wrapper,
 .tweetledum-tweet:hover > .tweetledummer-post-wrapper {
