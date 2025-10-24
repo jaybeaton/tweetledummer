@@ -412,6 +412,7 @@ const SCROLL_OFFSET = 55;
 
   document.addEventListener("visibilitychange", function() {
     if (!document.hidden) {
+      checkLoadMore();
       setUnreadCount(0);
     }
   });
