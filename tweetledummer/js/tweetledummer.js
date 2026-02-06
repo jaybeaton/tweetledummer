@@ -148,6 +148,7 @@ const SCROLL_OFFSET = 55;
         $(this).find('video.video-new').each(function () {
           let video = this;
           $(video).parent('.tweetledummer-post__video__wrapper').click( function () {
+            $(video).attr('autoplay', '');
             let hls = new Hls();
             hls.loadSource(video.src);
             hls.attachMedia(video);

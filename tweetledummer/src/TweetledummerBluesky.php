@@ -421,7 +421,7 @@ class TweetledummerBluesky {
             //$is_video = '<div class="tweetledummer-post__video"><img width=20" height="20" src="images/circle-play-regular.svg"><span>Video</span></div>';
             $is_video =  '<div class="tweetledummer-post__video">'
               . '<div class="tweetledummer-post__video__wrapper">'
-              . '<video class="video video-new" width="' . $width . 'px" height="' . $height . 'px" controls autoplay type="application/x-mpegURL" poster="' . $post['video']['thumbnail'] . '" src="' . $post['video']['playlist'] . '"></video>'
+              . '<video class="video video-new" width="' . $width . 'px" height="' . $height . 'px" controls type="application/x-mpegURL" poster="' . $post['video']['thumbnail'] . '" src="' . $post['video']['playlist'] . '"></video>'
               . '<img class="play-button" width="80" height="80" src="/images/play.svg">'
               . '</div>'
               . '</div>';
