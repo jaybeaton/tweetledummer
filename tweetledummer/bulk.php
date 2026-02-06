@@ -101,6 +101,7 @@ $num_unread = $controller->getUnread();
           <?php foreach ($lists as $list) { ?>
             <li class="list">
               <a href="bulk.php?list=<?php print urlencode($list); ?>"><?php print htmlentities($list); ?></a>
+              <span class="count-value"><?php print $controller->getUnread($list); ?></span>
               <a class="read-list" href="./#list:<?php print htmlentities($list) ?>"><img src="images/eye.svg" width="20" height="20" alt="Read" title="Read"></a>
             </li>
           <?php } ?>

@@ -565,6 +565,11 @@ div.count-label {
   padding: 5px;
 }
 
+.list .count-value {
+    font-size: 11px;
+    padding: 2px;
+}
+
 @media screen and (min-width: 775px) {
 /*
   .bulk-save--mark {

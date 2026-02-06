@@ -327,11 +327,32 @@ EOT;
 
     }
 
-    public function getUnread() {
-        $sql = "SELECT COUNT(id) as num_unread
-          FROM tweetledummer_posts
-          WHERE `read` = 0 ";
-        return $this->db->query($sql)->fetch_object()->num_unread;
+    public function getUnread($list = NULL) {
+      $sql = "SELECT COUNT(id) as num_unread
+        FROM tweetledummer_posts
+        WHERE `read` = 0 ";
+      if ($list) {
+        // Get the authors in list.
+        $authors = [];
+        $sql2 = "SELECT data
+                FROM tweetledummer_lists
+                WHERE name = ? ";
+        // @todo - We need to actually filter on the tweetledum user!
+        // AND user = ? ";
+        $query2 = $this->db->prepare($sql2);
+        $query2->bind_param('s', $list);
+        $query2->execute();
+        if ($list_data = $query2->get_result()->fetch_object()->data) {
+          $list_data = unserialize($list_data);
+          if (is_array($list_data)) {
+            foreach ($list_data as $author) {
+              $authors[] = "'" . $this->db->real_escape_string($author) . "'";
+            } // Loop thru authors.
+          }
+        }
+        $sql .= "AND author IN (" . implode(',', $authors) . ") ";
+      }
+      return $this->db->query($sql)->fetch_object()->num_unread;
     }
 
     private function getMessages($messages, $class) {
