@@ -135,7 +135,7 @@ $num_unread = $controller->getUnread();
           print '<tr>';
           print '<td class="checkbox"><input type="checkbox" name="author[]" id="' . htmlentities($id) . '" value="' . htmlentities($author) . '" ' . $checked . ' data-count=' . $row['num_tweets'] . '" /></td>';
           print '<td class="tweeter"><label for="' . htmlentities($id) . '">' . htmlentities($author) . '</label></td>';
-          print '<td class="count"><a href="./#' . htmlentities($author) . '">' . $row['num_tweets'] . '</a></td>';
+          print '<td class="count"><a href="./#' . htmlentities($author) . '"><span class="count-value">' . $row['num_tweets'] . '</span></a></td>';
           print "</tr>\n";
         }
 ?>

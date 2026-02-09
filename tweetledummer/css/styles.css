@@ -513,15 +513,42 @@ img.play-button {
   margin: 0 0 0 60px;
   width: 505px;
 }
-.bulk-mark-read td.checkbox {
+table.bulk-mark-read {
+    padding-bottom: 100px;
+    border-collapse: collapse;
+}
+.bulk-mark-read tr {
+    padding: 20px 0;
+}
+.bulk-mark-read tr.selected td {
+    background-color: #cedbf4
 }
 .bulk-mark-read td.tweeter {
 }
 .bulk-mark-read td.count {
   text-align: right;
 }
-table.bulk-mark-read {
-  padding-bottom: 100px;
+.bulk-mark-read td.count .count-value {
+  padding: 2px 4px;
+  font-size: 14px;
+  border: 1px transparent;
+}
+.bulk-mark-read tr.selected .count-value {
+    border: 1px solid #000;
+    background-color: transparent;
+}
+.bulk-mark-read td.count a {
+  text-decoration: none;
+  cursor: pointer;
+}
+.bulk-mark-read tr td.count a:hover .count-value {
+    cursor: pointer;
+    border: 1px solid #000;
+    background-color: #cedbf4;
+}
+.bulk-mark-read tr.selected td.count a:hover .count-value {
+  cursor: pointer;
+  background-color: #bbb;
 }
 .lists-wrapper h3 {
   margin-bottom: 0;
