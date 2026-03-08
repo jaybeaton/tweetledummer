@@ -39,7 +39,7 @@ if (!empty($profile->avatar)) {
             }
             ?>
             <div>
-                <a href="/bulk.php"><img src="images/list.svg" width="30" height="30" alt="Bulk" title="Bulk"></a>
+                <a href="/bulk.php"><img src="images/ballot-check.svg" width="30" height="30" alt="Bulk" title="Bulk"></a>
             </div>
         </div>
         <div class="info-bar__items">
