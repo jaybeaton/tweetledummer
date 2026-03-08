@@ -391,6 +391,8 @@ class TweetledummerBluesky {
     }
 
     public function showPost($post, $class = '', $author = NULL, $body = NUll, $stats = NULL) {
+        // Re-retrieve the post now, before displaying to update stats.
+        $now = $this->getPosts(['uris' => $post['uri']]);
         foreach (['author_display_name', 'author_handle', 'text'] as $key) {
             $post[$key] = htmlentities($post[$key] ?? '');
         }
@@ -399,7 +401,7 @@ class TweetledummerBluesky {
         }
         $post['text'] = nl2br($post['text']);
         foreach (['like', 'repost', 'reply'] as $type) {
-            $post[$type . '_count'] = (!empty($post[$type . '_count'])) ?: '';
+            $post[$type . '_count'] = max($now[0][$type . '_count'] ?? 0, $post[$type . '_count'] ?? 0);
             if ($post[$type . '_count'] > 1000) {
                 $post[$type . '_count'] = number_format($post[$type . '_count']/1000, 1) . 'K';
             }
