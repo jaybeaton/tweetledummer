@@ -3,21 +3,24 @@
   let $checkboxes = $('#bulk-mark-read .checkbox input');
 
   $('#bulk-toggle').change(function(e) {
+    $items = $('.bulk-mark-read .item');
     if (this.checked) {
       $checkboxes.prop('checked', true);
+      $items.addClass('selected');
     } else {
       $checkboxes.prop('checked', false);
+      $items.removeClass('selected');
     }
     count_selected();
   });
 
   $checkboxes.change(function() {
-    let $tr = $(this).parents('tr');
+    let $item = $(this).parents('div.item');
     if (this.checked) {
-      $tr.addClass('selected');
+      $item.addClass('selected');
     }
     else {
-      $tr.removeClass('selected');
+      $item.removeClass('selected');
     }
     count_selected();
   });
@@ -26,7 +29,7 @@
     let count = 0;
     let $checkboxes = $('#bulk-mark-read .checkbox input:checked');
     $checkboxes.each(function(e) {
-      $(this).parents('tr').addClass('selected');
+      $(this).parents('div.item').addClass('selected');
       count += parseInt($(this).attr('data-count'));
     });
     $('#total-selected').html(count);

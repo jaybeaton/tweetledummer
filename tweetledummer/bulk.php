@@ -122,24 +122,24 @@ $num_unread = $controller->getUnread();
       print $controller->getStatusMessages();
     ?>
     <form id="bulk-mark-read" action="<?php print $current_url; ?>" method="post">
-      <table class="bulk-mark-read">
-        <tr>
-          <th><input type="checkbox" id="bulk-toggle" /></th>
-          <th>Author</th>
-          <th>Count</th>
-        </tr>
+      <div class="bulk-mark-read">
+        <div class="header item">
+          <span class="checkbox"><input type="checkbox" id="bulk-toggle" /></span>
+          <span class="tweeter">Author</span>
+          <span class="count">Count</span>
+        </div>
 <?php
         foreach ($counts as $author => $row) {
           $checked = (in_array($author, $authors ?? [])) ? 'checked="checked"' : '';
           $id = 'tweeter__' . $author;
-          print '<tr>';
-          print '<td class="checkbox"><input type="checkbox" name="author[]" id="' . htmlentities($id) . '" value="' . htmlentities($author) . '" ' . $checked . ' data-count=' . $row['num_tweets'] . '" /></td>';
-          print '<td class="tweeter"><label for="' . htmlentities($id) . '">' . htmlentities($author) . '</label></td>';
-          print '<td class="count"><a href="./#' . htmlentities($author) . '"><span class="count-value">' . $row['num_tweets'] . '</span></a></td>';
-          print "</tr>\n";
+          print '<div class="item">';
+          print '<span class="checkbox"><input type="checkbox" name="author[]" id="' . htmlentities($id) . '" value="' . htmlentities($author) . '" ' . $checked . ' data-count=' . $row['num_tweets'] . '" /></span>';
+          print '<span class="tweeter"><label for="' . htmlentities($id) . '">' . htmlentities($author) . '</label></span>';
+          print '<span class="count"><a href="./#' . htmlentities($author) . '"><span class="count-value">' . $row['num_tweets'] . '</span></a></span>';
+          print "</div>\n";
         }
 ?>
-      </table>
+      </div>
       <div class="actions">
         <div>
           <input class="bulk-save bulk-save--mark" type="submit" name="mark-read" value="Mark read" />

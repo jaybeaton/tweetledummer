@@ -513,40 +513,56 @@ img.play-button {
   margin: 0 0 0 60px;
   width: 505px;
 }
-table.bulk-mark-read {
+div.bulk-mark-read {
+    width: 355px;
     padding-bottom: 100px;
     border-collapse: collapse;
+
 }
-.bulk-mark-read tr {
-    padding: 20px 0;
+.bulk-mark-read div.item {
+  display: grid;
+  grid-template-columns: 30px 250px 50px;
+  grid-column-gap: 10px;
+  grid-row-gap: 10px;
+  padding: 3px 0;
+  margin: 5px 0;
+  border: 1px transparent;
+  border-radius: 5px;
 }
-.bulk-mark-read tr.selected td {
-    background-color: #cedbf4
+.bulk-mark-read div.item.header {
+  font-weight: bold;
 }
-.bulk-mark-read td.tweeter {
+.bulk-mark-read div.item.selected {
+    background-color: #cedbf4;
+    border: 1px solid #000;
 }
-.bulk-mark-read td.count {
+.bulk-mark-read div.item:hover {
+    border: 1px solid #000;
+}
+.bulk-mark-read span.tweeter {
+}
+.bulk-mark-read span.count {
   text-align: right;
 }
-.bulk-mark-read td.count .count-value {
+.bulk-mark-read span.count .count-value {
   padding: 2px 4px;
   font-size: 14px;
   border: 1px transparent;
 }
-.bulk-mark-read tr.selected .count-value {
+.bulk-mark-read div.item.selected .count-value {
     border: 1px solid #000;
     background-color: transparent;
 }
-.bulk-mark-read td.count a {
+.bulk-mark-read span.count a {
   text-decoration: none;
   cursor: pointer;
 }
-.bulk-mark-read tr td.count a:hover .count-value {
+.bulk-mark-read div.item span.count a:hover .count-value {
     cursor: pointer;
     border: 1px solid #000;
     background-color: #cedbf4;
 }
-.bulk-mark-read tr.selected td.count a:hover .count-value {
+.bulk-mark-read div.item.selected span.count a:hover .count-value {
   cursor: pointer;
   background-color: #bbb;
 }
