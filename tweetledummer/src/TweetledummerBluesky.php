@@ -202,6 +202,11 @@ class TweetledummerBluesky {
         $found = FALSE;
         foreach ($result->feed as $item) {
             $data = $this->getPostData($item);
+
+//            if (empty($data['video'])) {
+//              continue;
+//            }
+
             $data['full'] = $item;
             $posts[] = $data;
 
@@ -503,6 +508,7 @@ class TweetledummerBluesky {
         }
 
         $age = $this->timeSince($post['timestamp'], 1);
+        $read_author_link = './#' . htmlentities($post['author_handle']);
 
         return <<<EOT
 <div class="tweetledummer-post-wrapper {$class}">
@@ -538,6 +544,7 @@ class TweetledummerBluesky {
                 <div class="tweetledummer-post__links">
                     {$link}
                     <a href="{$post['post_url']}"><img width=20" height="20" src="images/bsky.svg"></a>
+                    <a href="{$read_author_link}"><img width=20" height="20" src="images/user-message.svg"></a>
                 </div>
             </div>
         </div>
