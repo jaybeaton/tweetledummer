@@ -81,7 +81,7 @@ $num_unread = $controller->getUnread();
   }
   ?>
   <div>
-      <a href="/"><img src="images/list-timeline-full.svg" width="50" height="50" alt="Read" title="Read"></a>
+      <a href="/"><img src="images/book-open-lines.svg" width="50" height="50" alt="Read" title="Read"></a>
   </div>
   <div>
     <div class="count-label">Unread</div> <span id="unread-count"><?php print $num_unread; ?></span>
@@ -100,9 +100,12 @@ $num_unread = $controller->getUnread();
         <ul>
           <?php foreach ($lists as $list) { ?>
             <li class="list">
-              <a href="bulk.php?list=<?php print urlencode($list); ?>"><?php print htmlentities($list); ?></a>
-              <span class="count-value"><?php print $controller->getUnread($list); ?></span>
-              <a class="read-list" href="./#list:<?php print htmlentities($list) ?>"><img src="images/list-timeline.svg" width="20" height="20" alt="Read" title="Read"></a>
+              <a class="load-list" href="bulk.php?list=<?php print urlencode($list); ?>">
+                  <img src="images/list-check.svg" width="15" height="15" alt="Load list" title="Load list"><?php print htmlentities($list); ?>
+              </a>
+              <span class="count">
+                  <a class="read-list" title="Read" href="./#list:<?php print htmlentities($list) ?>"><span class="count-value"><?php print $controller->getUnread($list); ?></span></a>
+              </span>
             </li>
           <?php } ?>
         </ul>
@@ -135,7 +138,7 @@ $num_unread = $controller->getUnread();
           print '<div class="item">';
           print '<span class="checkbox"><input type="checkbox" name="author[]" id="' . htmlentities($id) . '" value="' . htmlentities($author) . '" ' . $checked . ' data-count=' . $row['num_tweets'] . '" /></span>';
           print '<span class="tweeter"><label for="' . htmlentities($id) . '">' . htmlentities($author) . '</label></span>';
-          print '<span class="count"><a href="./#' . htmlentities($author) . '"><span class="count-value">' . $row['num_tweets'] . '</span></a></span>';
+          print '<span class="count"><a title="Read" href="./#' . htmlentities($author) . '"><span class="count-value">' . $row['num_tweets'] . '</span></a></span>';
           print "</div>\n";
         }
 ?>

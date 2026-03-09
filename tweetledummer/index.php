@@ -38,8 +38,8 @@ if (!empty($profile->avatar)) {
                 print $profile_img;
             }
             ?>
-            <div>
-                <a href="/bulk.php"><img src="images/ballot-check.svg" width="30" height="30" alt="Bulk" title="Bulk"></a>
+            <div class="bulk-edit">
+                <a href="/bulk.php"><img src="images/list-check.svg" width="30" height="30" alt="Bulk" title="Bulk"></a>
             </div>
         </div>
         <div class="info-bar__items">
