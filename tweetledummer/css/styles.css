@@ -37,6 +37,10 @@ body {
   display: block;
   width: auto;
 }
+.info-bar__items div.bulk-edit img {
+  border: 1px solid black;
+  border-radius: 4px;
+}
 
 .info-column {
   position: fixed;
@@ -514,7 +518,7 @@ img.play-button {
   width: 505px;
 }
 div.bulk-mark-read {
-    width: 355px;
+    width: 358px;
     padding-bottom: 100px;
     border-collapse: collapse;
 
@@ -526,38 +530,53 @@ div.bulk-mark-read {
   grid-row-gap: 10px;
   padding: 3px 0;
   margin: 5px 0;
-  border: 1px transparent;
+  border: 2px solid transparent;
   border-radius: 5px;
+  align-items: center;
+  position: relative;
 }
 .bulk-mark-read div.item.header {
   font-weight: bold;
 }
 .bulk-mark-read div.item.selected {
     background-color: #cedbf4;
-    border: 1px solid #000;
+    border: 2px solid #000;
 }
 .bulk-mark-read div.item:hover {
-    border: 1px solid #000;
+    border: 2px solid #000;
 }
-.bulk-mark-read span.tweeter {
+.bulk-mark-read span.tweeter > label {
+  position: absolute;
+  padding: 0 0 0 35px;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  line-height: 30px;
+  z-index: 1;
+  box-sizing: border-box;
 }
 .bulk-mark-read span.count {
   text-align: right;
 }
+.bulk-mark-read span.count a {
+  position: relative;
+  z-index: 2;
+}
 .bulk-mark-read span.count .count-value {
   padding: 2px 4px;
   font-size: 14px;
-  border: 1px transparent;
+  border: 1px solid transparent;
 }
 .bulk-mark-read div.item.selected .count-value {
     border: 1px solid #000;
     background-color: transparent;
 }
-.bulk-mark-read span.count a {
+.bulk span.count a {
   text-decoration: none;
   cursor: pointer;
 }
-.bulk-mark-read div.item span.count a:hover .count-value {
+.bulk span.count a:hover .count-value {
     cursor: pointer;
     border: 1px solid #000;
     background-color: #cedbf4;
@@ -567,10 +586,10 @@ div.bulk-mark-read {
   background-color: #bbb;
 }
 .lists-wrapper h3 {
-  margin-bottom: 0;
+  margin-bottom: -15px;
 }
 .lists-wrapper .lists ul {
-  padding-inline-start: 17px;
+  padding-inline-start: 0;
 }
 .list-fields {
   margin-top: 30px;
@@ -579,11 +598,20 @@ div.bulk-mark-read {
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-bottom: 10px;
 }
-.list img {
-  display: block;
-  padding-top: 5px;
+.list .load-list img {
+  display: inline-block;
+  border: 1px solid black;
+  border-radius: 2px;
+  margin-right: 5px;
+  margin-bottom: -3px;
 }
+.list .count-value {
+  font-size: 13px;
+  padding: 3px;
+}
+
 .messages {
   width: 400px;
   border: 1px solid #3c763d;
@@ -606,11 +634,6 @@ div.count-label {
   background-color: #bbb;
   border-radius: 5px;
   padding: 5px;
-}
-
-.list .count-value {
-    font-size: 11px;
-    padding: 2px;
 }
 
 @media screen and (min-width: 775px) {
@@ -638,5 +661,6 @@ div.count-label {
       border-top: 2px solid;
       width: 100%;
       padding-left: 30px;
+      z-index: 3;
   }
 }
