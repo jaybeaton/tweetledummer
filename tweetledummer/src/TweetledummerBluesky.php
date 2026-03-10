@@ -544,7 +544,7 @@ class TweetledummerBluesky {
                 <div class="tweetledummer-post__links">
                     {$link}
                     <a href="{$post['post_url']}"><img width=20" height="20" src="images/bsky.svg"></a>
-                    <a target="_blank" href="{$read_author_link}"><img width=20" height="20" src="images/book-open-reader-duotone-regular-full.svg"></a>
+                    <a target="_blank" href="{$read_author_link}"><img width=20" height="20" src="images/book-open-reader.svg"></a>
                 </div>
             </div>
         </div>
