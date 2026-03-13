@@ -129,7 +129,8 @@ body.bulk .main {
   width: 300px;
   clear: both;
   font-size: 1rem;
-  line-height: 1.9;
+  height: 2.3rem;
+  border-radius: 1rem;
   padding: 0 4px;
 }
 .bulk-save.bulk-save--list {
@@ -650,7 +651,7 @@ div.count-label {
   }
 */
   .bulk-save.bulk-save--list {
-      margin-top: 20px;
+      margin-top: 18px;
   }
   .list-fields {
       padding: 0 50px;
