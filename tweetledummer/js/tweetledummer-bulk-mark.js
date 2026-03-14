@@ -4,6 +4,7 @@
 
   $('#bulk-toggle').change(function(e) {
     $items = $('.bulk-mark-read .item');
+    $('label[for="bulk-toggle"] span').toggle();
     if (this.checked) {
       $checkboxes.prop('checked', true);
       $items.addClass('selected');
@@ -27,10 +28,14 @@
 
   let count_selected = function() {
     let count = 0;
+    let num = 0;
     let $checkboxes = $('#bulk-mark-read .checkbox input:checked');
     $checkboxes.each(function(e) {
       $(this).parents('div.item').addClass('selected');
-      count += parseInt($(this).attr('data-count'));
+      num = parseInt($(this).attr('data-count'));
+      if (num) {
+        count += num;
+      }
     });
     $('#total-selected').html(count);
     let unread = $('#unread-count').html();
