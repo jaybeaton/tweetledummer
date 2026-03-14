@@ -14,6 +14,8 @@ class TweetledummerBluesky {
 
     const POSTER_IMAGE_MAX_WIDTH = 548;
 
+    const AUTHOR_INFO_MAX_AGE = 24 * 60 * 60;
+
     const ELLIPSIS = '…';
 
     private $settings = [];
@@ -332,6 +334,7 @@ class TweetledummerBluesky {
             $data['repost'] = [
                 'author_handle' => $item->reason->by->handle,
                 'author_display_name' => $item->reason->by->displayName,
+                'author_avatar' => $item->reason->by->avatar ?? '',
                 'author_url' => $this->getAuthorUrl($item->reason->by),
             ];
             $created_at = $item->reason->indexedAt;
@@ -616,6 +619,74 @@ EOT;
             $string .= $val . $key;
         }
         return $string;
+    }
+
+    public function getAuthorInfo() {
+      $sql = "SELECT `value`
+              FROM tweetledummer_key_value
+              WHERE `key` = ?
+              AND `timestamp` > ? ";
+      $query = $this->db->prepare($sql);
+      $key = 'bluesky_author_info:' . $this->blueskyUsername;
+      $timestamp = time() - self::AUTHOR_INFO_MAX_AGE;
+      $query->bind_param('si', $key, $timestamp);
+      $query->execute();
+      $info = unserialize($query->get_result()->fetch_object()->value ?? '');
+
+      if (!is_array($info)) {
+        // Data missing or expired. Refresh it.
+        $info = $this->refreshAuthorInfo($key);
+      }
+      return $info;
+    }
+
+    private function refreshAuthorInfo($key) {
+      // Get last posts from all authors.
+      $sql = "WITH ranked_posts AS (
+            SELECT p.*, ROW_NUMBER() OVER (PARTITION BY author ORDER BY timestamp DESC) AS rn
+            FROM tweetledummer_posts AS p
+          )
+          SELECT author, data FROM ranked_posts WHERE rn = 1 ";
+      $result = $this->db->query($sql);
+      $info = [];
+      while ($row = $result->fetch_assoc()) {
+        $data = unserialize($row['data']);
+        if (!empty($data['repost'])) {
+          $author = [
+            'author_handle' => $data['repost']['author_handle'],
+            'author_display_name' => $data['repost']['author_display_name'],
+            'author_avatar' => $data['repost']['author_avatar'] ?? '',
+          ];
+        }
+        else {
+          $author = [
+            'author_handle' => $data['author_handle'],
+            'author_display_name' => $data['author_display_name'],
+            'author_avatar' => $data['author_avatar'],
+          ];
+        }
+        $info[$row['author']] = $author;
+      }
+
+      $sql = "REPLACE INTO tweetledummer_key_value
+            (`key`, `value`, `timestamp`)
+            VALUES
+            (?, ?, ?) ";
+      try {
+        $query = $this->db->prepare($sql);
+        $timestamp = time();
+        $data = serialize($info);
+        $query->bind_param('ssi',
+          $key,
+          $data,
+          $timestamp);
+        $query->execute();
+      } catch (\Exception $e) {
+        print $sql . '<br>' . $e->getCode() . ': ' . $e->getMessage();
+      }
+      $query->close();
+      return $info;
+
     }
 
 }

@@ -295,6 +295,8 @@ EOT;
     }
 
     public function getCounts() {
+        // Get cached author info.
+        $author_info = $this->tweetledummer->getAuthorInfo();
 
         // Get all authors first.
         $sql = "SELECT DISTINCT t.author, 0 AS num_tweets
@@ -303,7 +305,7 @@ EOT;
         $result = $this->db->query($sql);
         $all_authors = [];
         while ($row = $result->fetch_assoc()) {
-            $all_authors[$row['author']] = $row;
+            $all_authors[$row['author']] = $row + ($author_info[$row['author']] ?? []);
         }
 
         // Then, get all with tweets.
@@ -316,7 +318,7 @@ EOT;
 
         $counts = [];
         while ($row = $result->fetch_assoc()) {
-            $counts[$row['author']] = $row;
+            $counts[$row['author']] = $row + ($author_info[$row['author']] ?? []);
             // Remove from "all authors" list.
             unset($all_authors[$row['author']]);
         }
