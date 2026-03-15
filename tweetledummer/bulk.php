@@ -126,19 +126,30 @@ $num_unread = $controller->getUnread();
     ?>
     <form id="bulk-mark-read" action="<?php print $current_url; ?>" method="post">
       <div class="bulk-mark-read">
-        <div class="header item">
-          <span class="checkbox"><input type="checkbox" id="bulk-toggle" /></span>
-          <span class="tweeter">Author</span>
-          <span class="count">Count</span>
+        <div class="header">
+          <div>
+              <input type="checkbox" id="bulk-toggle" />
+              <span class="label"><label for="bulk-toggle"><span>Select</span><span style="display:none;">Unselect</span> all</label></span>
+          </div>
         </div>
 <?php
         foreach ($counts as $author => $row) {
           $checked = (in_array($author, $authors ?? [])) ? 'checked="checked"' : '';
           $id = 'tweeter__' . $author;
           print '<div class="item">';
-          print '<span class="checkbox"><input type="checkbox" name="author[]" id="' . htmlentities($id) . '" value="' . htmlentities($author) . '" ' . $checked . ' data-count=' . $row['num_tweets'] . '" /></span>';
-          print '<span class="tweeter"><label for="' . htmlentities($id) . '">' . htmlentities($author) . '</label></span>';
-          print '<span class="count"><a title="Read" href="./#' . htmlentities($author) . '"><span class="count-value">' . $row['num_tweets'] . '</span></a></span>';
+          print '<div class="checkbox" style="display: none;"><input type="checkbox" name="author[]" id="' . htmlentities($id) . '" value="' . htmlentities($author) . '" ' . $checked . ' data-count=' . $row['num_tweets'] . '" /></div>';
+          print '<div class="tweeter"><label for="' . htmlentities($id) . '">';
+          if (empty($row['author_avatar'])) {
+              $row['author_avatar'] = 'images/circle-user-regular.svg';
+          }
+          print '<img width="38" height="38" src="' . $row['author_avatar'] . '">';
+          print '<div class="author-info">';
+          if (!empty($row['author_display_name'])) {
+              print '<div class="author-display-name">' . htmlentities($row['author_display_name']) . '</div>';
+          }
+          print '<div class="author-handle">' . htmlentities($row['author_handle']) . '</div>';
+          print '</div></label></div>';
+          print '<div class="count"><a title="Read" href="./#' . htmlentities($author) . '"><span class="count-value">' . $row['num_tweets'] . '</span></a></div>';
           print "</div>\n";
         }
 ?>

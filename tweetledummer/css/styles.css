@@ -1,6 +1,6 @@
 body {
   margin: 10px 25px;
-  background-color: #ddd;
+  background-color: #efefef;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 1rem;
   font-weight: 400;
@@ -523,32 +523,53 @@ img.play-button {
   width: 505px;
 }
 div.bulk-mark-read {
-    width: 358px;
+    width: 400px;
     padding-bottom: 100px;
     border-collapse: collapse;
 
 }
+.bulk-mark-read div.header {
+  font-weight: bold;
+}
 .bulk-mark-read div.item {
   display: grid;
-  grid-template-columns: 30px 250px 50px;
+  grid-template-columns: 335px 50px;
   grid-column-gap: 10px;
   grid-row-gap: 10px;
+  height: 35px;
   padding: 3px 0;
-  margin: 5px 0;
-  border: 2px solid transparent;
-  border-radius: 5px;
+  margin: 3px 0;
+  background-color: #fff;
+  border: 2px solid #ccc;
+  border-radius: 15px;
   align-items: center;
   position: relative;
 }
-.bulk-mark-read div.item.header {
-  font-weight: bold;
+.bulk-mark-read div.item .tweeter label {
+  display: grid;
+  grid-template-columns: 45px 290px;
+}
+.bulk-mark-read div.item .tweeter label img {
+  border-radius: 12px 0 0 12px;
+}
+.bulk-mark-read div.item .tweeter label .author-display-name {
+  font-size: 14px;
+  height: 20px;
+  width: 290px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bulk-mark-read div.item .tweeter label .author-handle {
+  font-size: 12px;
+  color: rgb(66, 87, 108);
 }
 .bulk-mark-read div.item.selected {
     background-color: #cedbf4;
-    border: 2px solid #212529;
+    border: 2px solid #990000;
 }
 .bulk-mark-read div.item:hover {
-    border: 2px solid #212529;
+    border: 2px solid #990000;
 }
 .bulk-mark-read span.tweeter > label {
   position: absolute;
@@ -561,21 +582,29 @@ div.bulk-mark-read {
   z-index: 1;
   box-sizing: border-box;
 }
+.bulk-mark-read div.count {
+  cursor: pointer;
+  border-left: 2px solid #ccc;
+  border-right: 1px solid transparent;
+  /*background-color: #bbb;*/
+  /*height: 30px;*/
+}
 .bulk-mark-read span.count {
   text-align: right;
 }
-.bulk-mark-read span.count a {
+.bulk-mark-read div.count a {
+  color: #666;
+  text-decoration: none;
   position: relative;
+  padding-left: 10px;
   z-index: 2;
 }
 .bulk-mark-read span.count .count-value {
   padding: 2px 4px;
   font-size: 14px;
-  border: 1px solid transparent;
 }
-.bulk-mark-read div.item.selected .count-value {
-    border: 1px solid #212529;
-    background-color: transparent;
+.bulk-mark-read div.item.selected div.count {
+  background-color: #cedbf4;
 }
 .bulk span.count a {
   text-decoration: none;
@@ -635,7 +664,7 @@ div.count-label {
   padding-bottom: 0;
   font-weight: bold;
 }
-.count-value {
+.info-column .count-value {
   color: #666;
   background-color: #bbb;
   border-radius: 5px;
