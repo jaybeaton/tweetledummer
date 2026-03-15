@@ -325,6 +325,9 @@ body.bulk .main {
 .tweetledummer-post__body {
   font-size: 18px;
   font-family: ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+  width: 548px;
 }
 .tweetledummer-post__created {
   font-size: .875rem;
