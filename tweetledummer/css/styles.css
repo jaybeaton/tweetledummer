@@ -234,6 +234,7 @@ body.bulk .main {
 }
 .quoted .tweetledummer-post .tweetledummer-post__body {
   font-size: 18px;
+  width: 100%;
 }
 .quoted .tweetledummer-post__footer {
   display: none;
@@ -534,7 +535,7 @@ div.bulk-mark-read {
 .bulk-mark-read div.header {
   font-weight: bold;
 }
-.bulk-mark-read div.item {
+.bulk-mark-read .item {
   display: grid;
   grid-template-columns: 335px 50px;
   grid-column-gap: 10px;
@@ -547,6 +548,9 @@ div.bulk-mark-read {
   border-radius: 15px;
   align-items: center;
   position: relative;
+}
+.bulk-mark-read .item.item__no-posts {
+  background-color: #ededed;
 }
 .bulk-mark-read div.item .tweeter label {
   display: grid;

@@ -135,8 +135,9 @@ $num_unread = $controller->getUnread();
 <?php
         foreach ($counts as $author => $row) {
           $checked = (in_array($author, $authors ?? [])) ? 'checked="checked"' : '';
+          $class = ($row['num_tweets'] > 0) ? 'item__has-posts' : 'item__no-posts';
           $id = 'tweeter__' . $author;
-          print '<div class="item">';
+          print '<div class="item ' . $class . '">';
           print '<div class="checkbox" style="display: none;"><input type="checkbox" name="author[]" id="' . htmlentities($id) . '" value="' . htmlentities($author) . '" ' . $checked . ' data-count=' . $row['num_tweets'] . '" /></div>';
           print '<div class="tweeter"><label for="' . htmlentities($id) . '">';
           if (empty($row['author_avatar'])) {
