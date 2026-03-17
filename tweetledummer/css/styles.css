@@ -561,6 +561,7 @@ div.bulk-mark-read {
 }
 .bulk-mark-read div.item .tweeter label .author-display-name {
   font-size: 14px;
+  font-weight: bold;
   height: 20px;
   width: 290px;
   white-space: nowrap;
@@ -568,7 +569,11 @@ div.bulk-mark-read {
   text-overflow: ellipsis;
 }
 .bulk-mark-read div.item .tweeter label .author-handle {
+  margin-top: -7px;
+}
+.bulk-mark-read div.item .tweeter label .author-handle a {
   font-size: 12px;
+  text-decoration: none;
   color: rgb(66, 87, 108);
 }
 .bulk-mark-read div.item.selected {
@@ -603,7 +608,7 @@ div.bulk-mark-read {
   color: #666;
   text-decoration: none;
   position: relative;
-  padding-left: 10px;
+  padding: 10px;
   z-index: 2;
 }
 .bulk-mark-read span.count .count-value {

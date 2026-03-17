@@ -148,7 +148,7 @@ $num_unread = $controller->getUnread();
           if (!empty($row['author_display_name'])) {
               print '<div class="author-display-name">' . htmlentities($row['author_display_name']) . '</div>';
           }
-          print '<div class="author-handle">' . htmlentities($row['author_handle']) . '</div>';
+          print '<div class="author-handle"><a href="http://bsky.app/profile/' . htmlentities($row['author_handle']) . '">' . htmlentities($row['author_handle']) . '</a></div>';
           print '</div></label></div>';
           print '<div class="count"><a title="Read" href="./#' . htmlentities($author) . '"><span class="count-value">' . $row['num_tweets'] . '</span></a></div>';
           print "</div>\n";
