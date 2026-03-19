@@ -576,6 +576,9 @@ div.bulk-mark-read {
   text-decoration: none;
   color: rgb(66, 87, 108);
 }
+.bulk-mark-read div.item .tweeter label .author-handle a:hover {
+  text-decoration: underline;
+}
 .bulk-mark-read div.item.selected {
     background-color: #cedbf4;
     border: 2px solid #990000;
@@ -610,6 +613,9 @@ div.bulk-mark-read {
   position: relative;
   padding: 10px;
   z-index: 2;
+}
+.bulk-mark-read div.count a:hover {
+  text-decoration: underline;
 }
 .bulk-mark-read span.count .count-value {
   padding: 2px 4px;
