@@ -1,3 +1,9 @@
+window.onpageshow = function(event) {
+    if (event.persisted) {
+        window.location.reload();
+    }
+};
+
 (function ($) {
 
   let $checkboxes = $('#bulk-mark-read .checkbox input');
