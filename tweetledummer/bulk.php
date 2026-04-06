@@ -80,16 +80,13 @@ $num_unread = $controller->getUnread();
     print $profile_img;
   }
   ?>
-  <div>
-      <a href="/"><img src="images/book-open-lines.svg" width="50" height="50" alt="Read" title="Read"></a>
+  <div class="count">
+      <div class="count-label">Unread</div> <a href="/"><span class="count-value" id="unread-count"><?php print $num_unread; ?></span></a>
   </div>
-  <div>
-    <div class="count-label">Unread</div> <span id="unread-count"><?php print $num_unread; ?></span>
-  </div>
-  <div>
+  <div class="count">
     <div class="count-label">Selected</div> <span class="count-value" id="total-selected">0</span>
   </div>
-  <div>
+  <div class="count">
     <div class="count-label">Remaining</div> <span class="count-value" id="total-remaining">0</span>
   </div>
 
@@ -146,9 +143,9 @@ $num_unread = $controller->getUnread();
           print '<img width="38" height="38" src="' . $row['author_avatar'] . '">';
           print '<div class="author-info">';
           if (!empty($row['author_display_name'])) {
-              print '<div class="author-display-name">' . htmlentities($row['author_display_name']) . '</div>';
+              print '<div class="author-display-name">' . htmlentities($row['author_display_name'] ?? '') . '</div>';
           }
-          print '<div class="author-handle"><a href="http://bsky.app/profile/' . htmlentities($row['author_handle']) . '">' . htmlentities($row['author_handle']) . '</a></div>';
+          print '<div class="author-handle"><a href="http://bsky.app/profile/' . htmlentities($author) . '">' . htmlentities($author) . '</a></div>';
           print '</div></label></div>';
           print '<div class="count"><a title="Read" href="./#' . htmlentities($author) . '"><span class="count-value">' . $row['num_tweets'] . '</span></a></div>';
           print "</div>\n";

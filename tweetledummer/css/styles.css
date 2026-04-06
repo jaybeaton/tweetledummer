@@ -61,16 +61,12 @@ body {
   padding-bottom: 20px;
   position: relative;
 }
-#unread-count {
-  background-color: #bbb;
-  color: #666;
-  border-radius: 5px;
-  padding: 5px;
-}
 body.read #unread-count {
+  color: #666;
   background-color: #ddd;
   font-weight: bold;
   border: 1px solid;
+  border-radius: 5px;
   padding: 2px 5px;
 }
 body.read #unread-count.loading {
@@ -624,11 +620,11 @@ div.bulk-mark-read {
 .bulk-mark-read div.item.selected div.count {
   background-color: #cedbf4;
 }
-.bulk span.count a {
+.bulk .count a {
   text-decoration: none;
   cursor: pointer;
 }
-.bulk span.count a:hover .count-value {
+.bulk .info-column .count a:hover .count-value {
     cursor: pointer;
     border: 1px solid #212529;
     background-color: #cedbf4;
