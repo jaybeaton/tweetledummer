@@ -631,9 +631,9 @@ EOT;
       $timestamp = time() - self::AUTHOR_INFO_MAX_AGE;
       $query->bind_param('si', $key, $timestamp);
       $query->execute();
-      $info = unserialize($query->get_result()->fetch_object()->value ?? '');
+      $info = @unserialize($query->get_result()->fetch_object()->value ?? '');
 
-      if (!is_array($info)) {
+      if (!is_array($info) || !empty($_GET['refresh'])) {
         // Data missing or expired. Refresh it.
         $info = $this->refreshAuthorInfo($key);
       }
@@ -642,36 +642,19 @@ EOT;
 
     private function refreshAuthorInfo($key) {
       // Get last posts from all authors.
-//      $sql = "WITH ranked_posts AS (
-//            SELECT p.*, ROW_NUMBER() OVER (PARTITION BY author ORDER BY timestamp DESC) AS rn
-//            FROM tweetledummer_posts AS p
-//          )
-//          SELECT author, data FROM ranked_posts WHERE rn = 1 ";
-
-
-      // Get all authors first.
-      $sql = "SELECT DISTINCT t.author
-          FROM tweetledummer_posts t
-          ORDER BY t.author ";
-
-
+      $sql = "WITH ranked_posts AS (
+            SELECT p.*, ROW_NUMBER() OVER (PARTITION BY author ORDER BY timestamp DESC) AS rn
+            FROM tweetledummer_posts AS p
+          )
+          SELECT author, data FROM ranked_posts WHERE rn = 1 ";
       $result = $this->db->query($sql);
       $info = [];
       while ($row = $result->fetch_assoc()) {
-
-
-        $sql2 = "SELECT data
-          FROM tweetledummer_posts
-          WHERE author = ?
-          ORDER BY `timestamp` DESC
-          LIMIT 1";
-        $query = $this->db->prepare($sql2);
-        $query->bind_param('s', $row['author']);
-        $query->execute();
-        $row['data'] = $query->get_result()->fetch_object()->data ?? '';
-
-
-        $data = unserialize($row['data']);
+        $data = @unserialize($row['data']);
+        if (!is_array($data)) {
+          // Invalid data.
+          continue;
+        }
         if (!empty($data['repost'])) {
           $author = [
             'author_handle' => $data['repost']['author_handle'],
