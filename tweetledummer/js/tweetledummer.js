@@ -305,6 +305,10 @@ const SCROLL_OFFSET = 55;
       keyCode = event.keyCode;
     }
 
+    let metaKey = event.metaKey;
+    let ctrlKey = event.ctrlKey;
+    let altKey = event.altKey;
+
     if (keyCode === 78) {
       // Pressing "n" will bring active tweet to top.
       event.preventDefault();
@@ -366,6 +370,26 @@ const SCROLL_OFFSET = 55;
     else if (keyCode === 83) {
       // Pressing "s" will show/hide extra info body.
       activeItem.toggleClass('show-extra');
+    }
+    else if (metaKey && keyCode === 186) {
+      // Pressing meta-";" will open url in iframe.
+      event.preventDefault();
+      let url = activeItem.attr('data-url');
+      $('.view-container').show();
+      window.open(url, 'view');
+    }
+    else if ((metaKey && keyCode === 222) || keyCode === 32) {
+      // Pressing meta-"'" (or space) will open post in iframe.
+      event.preventDefault();
+      let url = activeItem.attr('data-tweet');
+      $('.view-container').show();
+      window.open(url, 'view');
+    }
+    else if (keyCode === 27) {
+      // Pressing esc closes the iframe.
+      event.preventDefault();
+      $('.view-container').hide();
+      $('#view-window').attr('src', '');
     }
   };
 

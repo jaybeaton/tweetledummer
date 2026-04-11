@@ -62,6 +62,12 @@ if (!empty($profile->avatar)) {
     <button id="load-more">Load More Posts</button>
 </div>
 
+<div class="view">
+    <div class="view-container">
+        <iframe name="view" id="view-window" src="" width="100%" height="100%"></iframe>
+    </div>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@canary""></script>
 <script src="js/jquery.visible.min.js"></script>

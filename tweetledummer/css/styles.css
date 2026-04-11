@@ -713,3 +713,20 @@ div.count-label {
       z-index: 3;
   }
 }
+.view {
+  position: fixed;
+  top: 65px;
+  left: 705px;
+  width: 790px;
+  height: 900px;
+}
+.view-container {
+  border: 3px solid #990000;
+  border-radius: 12px;
+  height: 100%;
+  display: none;
+}
+.view-container #view-window {
+  border: none;
+  border-radius: 12px;
+}
