@@ -11,6 +11,7 @@ const SCROLL_OFFSET = 55;
 
   let checkingLoadMore = false;
   let isLoading = false;
+  const iframeViewer = document.getElementById('view-window');
 
   if (window.location.hash === '#debug') {
     twtldDebug = true;
@@ -376,14 +377,14 @@ const SCROLL_OFFSET = 55;
       event.preventDefault();
       let url = activeItem.attr('data-url');
       $('.view-container').show();
-      window.open(url, 'view');
+      iframeViewer.contentWindow.location.replace(url);
     }
     else if ((metaKey && keyCode === 222) || keyCode === 32) {
       // Pressing meta-"'" (or space) will open post in iframe.
       event.preventDefault();
       let url = activeItem.attr('data-tweet');
       $('.view-container').show();
-      window.open(url, 'view');
+      iframeViewer.contentWindow.location.replace(url);
     }
     else if (keyCode === 27) {
       // Pressing esc closes the iframe.
@@ -394,7 +395,7 @@ const SCROLL_OFFSET = 55;
 
   let closeIframeView = function () {
     $('.view-container').hide();
-    $('#view-window').attr('src', '');
+    iframeViewer.contentWindow.location.replace('about:blank');
   }
 
   let scrollToElement = function (element) {
