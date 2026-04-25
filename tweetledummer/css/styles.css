@@ -730,3 +730,20 @@ div.count-label {
   border: none;
   border-radius: 12px;
 }
+button#close-frame {
+  position: absolute;
+  top: -15px;
+  left: -15px;
+}
+button#close-frame {
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  background-color: #fff;
+  border: 3px solid #990000;
+  border-radius: 8px;
+  font-weight: bold;
+}
+button#close-frame:hover {
+  background-color: #ccc;
+}

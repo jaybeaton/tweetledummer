@@ -388,10 +388,14 @@ const SCROLL_OFFSET = 55;
     else if (keyCode === 27) {
       // Pressing esc closes the iframe.
       event.preventDefault();
-      $('.view-container').hide();
-      $('#view-window').attr('src', '');
+      closeIframeView();
     }
   };
+
+  let closeIframeView = function () {
+    $('.view-container').hide();
+    $('#view-window').attr('src', '');
+  }
 
   let scrollToElement = function (element) {
     $('html, body').animate({
@@ -434,6 +438,10 @@ const SCROLL_OFFSET = 55;
   if (isTouchDevice()) {
     $('.tweetledum-controls').show();
   }
+
+  $('button#close-frame').click(function () {
+    closeIframeView();
+  });
 
   document.addEventListener("visibilitychange", function() {
     if (!document.hidden) {

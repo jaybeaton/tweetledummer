@@ -64,6 +64,7 @@ if (!empty($profile->avatar)) {
 
 <div class="view">
     <div class="view-container">
+        <button id="close-frame" aria-label="Close iFrame">X</button>
         <iframe name="view" id="view-window" src="" width="100%" height="100%"></iframe>
     </div>
 </div>
