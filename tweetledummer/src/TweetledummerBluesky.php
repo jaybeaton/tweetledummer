@@ -640,7 +640,7 @@ EOT;
       return $info;
     }
 
-    private function refreshAuthorInfo($key) {
+    public function refreshAuthorInfo($key) {
       // Get last posts from all authors.
       $sql = "WITH ranked_posts AS (
             SELECT p.*, ROW_NUMBER() OVER (PARTITION BY author ORDER BY timestamp DESC) AS rn
