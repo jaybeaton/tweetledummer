@@ -641,15 +641,28 @@ EOT;
     }
 
     public function refreshAuthorInfo($key) {
+
       // Get last posts from all authors.
-      $sql = "WITH ranked_posts AS (
-            SELECT p.*, ROW_NUMBER() OVER (PARTITION BY author ORDER BY timestamp DESC) AS rn
-            FROM tweetledummer_posts AS p
-          )
-          SELECT author, data FROM ranked_posts WHERE rn = 1 ";
+      // Get all authors first.
+      $sql = "SELECT DISTINCT t.author
+        FROM tweetledummer_posts t
+        ORDER BY t.author ";
       $result = $this->db->query($sql);
+
       $info = [];
       while ($row = $result->fetch_assoc()) {
+
+        // Get the last post from this author.
+        $sql2 = "SELECT data
+          FROM tweetledummer_posts
+          WHERE author = ?
+          ORDER BY `timestamp` DESC
+          LIMIT 1";
+        $query = $this->db->prepare($sql2);
+        $query->bind_param('s', $row['author']);
+        $query->execute();
+        $row['data'] = $query->get_result()->fetch_object()->data ?? '';
+
         $data = @unserialize($row['data']);
         if (!is_array($data)) {
           // Invalid data.
